@@ -49,43 +49,63 @@ const Section = ({children, title}) => {
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.body}>
-      <View>
-        <Text style={styles.text}>
-          AnyTalk
-        </Text>
-      </View>
-      <View style={styles.input_view}>
-        <TextInput style={styles.input}>
-
-        </TextInput>
-        <Button title = "Convert to Speech" onPress={() => console.log("Button 1 Tapped!")}/>
-        <Button title = "Receive voice" onPress={() => console.log("Button 2 Tapped!")}/>
+    <SafeAreaView style={styles.safe_area}>
+      <View style={styles.body}>
+        <View style={styles.title_view}>
+          <Text style={styles.text}>
+            AnyTalk
+          </Text>
+        </View>
+        <View style={styles.input_view}>
+            <TextInput style={styles.input}/>
+            <View style={styles.button_view}>
+              <View style={styles.button}>
+                <Button title = "Convert to Speech" onPress={() => console.log("Button 1 Tapped!")}/>
+              </View> 
+              <View style={styles.button}>
+                <Button title = "Receive voice" onPress={() => console.log("Button 2 Tapped!")}/>
+              </View>
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safe_area: {
+    flex: 1,
+  },
   body: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#81ecec',
     alignItems: 'center'
+  },
+  title_view: {
+    flex: 1,
+    backgroundColor: '#a29bfe'
   },
   text: {
     fontSize: 30
   },
   input_view: {
-    position: 'absolute',
-    bottom: 150
+    backgroundColor: '#dfe6e9',
+    flex: 0.5
+  },
+  button_view: {
+    flex: 1,
+    flexDirection: 'row'
   },
   input: {
-    flex: 1,
     width: 300,
     height: 150,
-    borderWidth: 3,
+    borderWidth: 1,
     borderRadius: 8,
     borderColor: '#000000'
+  },
+  button: {
+    flex: 1,
+    backgroundColor: '#55efc4'
   }
 });
 
