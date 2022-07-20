@@ -3,6 +3,7 @@ import React from 'react';
 import type {Node} from 'react';
 import {
   Button,
+  Pressable,
   SafeAreaView,
   //ScrollView,
   //StatusBar,
@@ -52,18 +53,22 @@ const App = () => {
     <SafeAreaView style={styles.safe_area}>
       <View style={styles.body}>
         <View style={styles.title_view}>
-          <Text style={styles.text}>
+          <Text style={styles.title}>
             AnyTalk
           </Text>
         </View>
         <View style={styles.input_view}>
-            <TextInput style={styles.input}/>
+            <TextInput style={styles.input} multiline={true} placeholder="Type text to be read aloud..."/>
             <View style={styles.button_view}>
               <View style={styles.button}>
-                <Button title = "Convert to Speech" onPress={() => console.log("Button 1 Tapped!")}/>
+                <Pressable style={styles.button} onPress={() => console.log("Button 1 Tapped!")}>
+                  <Text style={styles.button_text}>Convert</Text>
+                </Pressable>
               </View> 
               <View style={styles.button}>
-                <Button title = "Receive voice" onPress={() => console.log("Button 2 Tapped!")}/>
+              <Pressable style={styles.button} onPress={() => console.log("Button 2 Tapped!")}>
+                  <Text style={styles.button_text}>Receive</Text>
+                </Pressable>
               </View>
           </View>
         </View>
@@ -85,8 +90,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#a29bfe'
   },
-  text: {
-    fontSize: 30
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold'
   },
   input_view: {
     backgroundColor: '#dfe6e9',
@@ -97,15 +103,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   input: {
+    flex: 1,
     width: 300,
     height: 150,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: '#000000'
+    padding: 10,
+    textAlignVertical: 'top'
   },
   button: {
     flex: 1,
-    backgroundColor: '#55efc4'
+    backgroundColor: '#55efc4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    elevation: 3,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 20,
+    marginBottom: 20
+  },
+  button_text: {
+    fontSize: 12,
+    color: 'blue',
   }
 });
 
