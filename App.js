@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import type {Node} from 'react';
 import {
   Button,
   Pressable,
+  ProgressViewIOSComponent,
   SafeAreaView,
   //ScrollView,
   //StatusBar,
@@ -13,6 +14,7 @@ import {
   //useColorScheme,
   View,
 } from 'react-native';
+import FlatButton from './src/components/button';
 
 import {
   Colors,
@@ -49,6 +51,7 @@ const Section = ({children, title}) => {
 };
 
 const App = () => {
+  const [text, setText] = useState("");
   return (
     <SafeAreaView style={styles.safe_area}>
       <View style={styles.body}>
@@ -58,17 +61,18 @@ const App = () => {
           </Text>
         </View>
         <View style={styles.input_view}>
-            <TextInput style={styles.input} multiline={true} placeholder="Type text to be read aloud..."/>
+            <TextInput 
+              style={styles.input}
+              multiline={true} 
+              placeholder="Type text to be read aloud..."
+              onChangeText={newText => setText(newText)}
+              />
             <View style={styles.button_view}>
               <View style={styles.button}>
-                <Pressable style={styles.button} onPress={() => console.log("Button 1 Tapped!")}>
-                  <Text style={styles.button_text}>Convert</Text>
-                </Pressable>
+                <FlatButton text='Convert' onPress={() => console.log(text)} />
               </View> 
               <View style={styles.button}>
-              <Pressable style={styles.button} onPress={() => console.log("Button 2 Tapped!")}>
-                  <Text style={styles.button_text}>Receive</Text>
-                </Pressable>
+                <FlatButton text='Receive' onPress={() => console.log(text)} />
               </View>
           </View>
         </View>
@@ -116,16 +120,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#55efc4',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 4,
-    elevation: 3,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 20,
-    marginBottom: 20
-  },
-  button_text: {
-    fontSize: 12,
-    color: 'blue',
   }
 });
 
