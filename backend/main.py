@@ -4,6 +4,7 @@ import json
 from GCP_utils import GCP_utils
 
 app = Flask(__name__)
+gcp_controller = GCP_utils()
 
 @app.route('/text_to_speech/')
 def text_to_speech():
