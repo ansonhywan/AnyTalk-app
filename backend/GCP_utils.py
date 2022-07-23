@@ -1,7 +1,6 @@
-from google.cloud import texttospeech, speech
+from google.cloud import texttospeech, speech, storage
 import json
 from datetime import datetime
-
 
 class GCP_utils:
     '''
@@ -30,15 +29,12 @@ class GCP_utils:
     def convert_s2t(self, speech_uri):
         audio = speech.RecognitionAudio(uri=speech_uri)
         config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
             sample_rate_hertz=16000,
             language_code="en-US",
         )
         response = self.s2t_client.recognize(config=config, audio=audio)
-        text = ""
-        for result in response.results:
-            text = text + result.alternatives[0].transcript + " "
-        return text
+        return response.results[0].alternatives[0].transcript
 
     def upload_file(self):
         print(buckets = list(self.storage_client.list_buckets()))
@@ -46,5 +42,3 @@ class GCP_utils:
         blob = bucket.blob(blob_name)
         blob.upload_from_filename(path_to_file)
         return blob.public_url 
-
-import pdb; pdb.set_trace()

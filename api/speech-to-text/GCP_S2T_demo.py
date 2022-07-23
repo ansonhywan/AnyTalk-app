@@ -8,12 +8,12 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'anytalk-gcp-cred.json'
 client = speech.SpeechClient()
 
 # The name of the audio file to transcribe
-gcs_uri = "gs://cloud-samples-data/speech/brooklyn_bridge.raw"
+gcs_uri = "gs://anytalk-mp3s/mp3s/tony_2.flac"
 
 audio = speech.RecognitionAudio(uri=gcs_uri)
 
 config = speech.RecognitionConfig(
-    encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+    encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
     sample_rate_hertz=16000,
     language_code="en-US",
 )
