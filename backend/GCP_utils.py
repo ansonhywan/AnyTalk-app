@@ -1,5 +1,4 @@
 from google.cloud import texttospeech, speech, storage
-import json
 from datetime import datetime
 
 class GCP_utils:
@@ -39,7 +38,7 @@ class GCP_utils:
     def upload_file(self, path_to_file):
         print("buckets = {}".format(list(self.storage_client.list_buckets())))
         bucket = self.storage_client.get_bucket("anytalk-mp3s")
-        blob = bucket.blob("mp3s/testfile.mp3")
+        blob = bucket.blob(path_to_file)
         blob.upload_from_filename(path_to_file)
         return blob.public_url
 

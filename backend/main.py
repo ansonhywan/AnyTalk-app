@@ -23,6 +23,7 @@ def text_to_speech():
 def speech_to_text():
 	speech_path = request.json.get("speech_path")
 	if speech_path == None: return json.dumps({"error": "must specify speech path in body"})
+	if not gcp_controller.file_exists(speech_path): return json.dumps({"error": "speech file does not exist in blob"})
 
 	text = gcp_controller.convert_s2t(speech_path)
 
