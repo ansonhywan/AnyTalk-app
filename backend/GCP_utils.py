@@ -12,7 +12,7 @@ class GCP_utils:
         pass
 
     def upload_file(self):
-        print(buckets = list(self.storage_client.list_buckets())
+        print(buckets = list(self.storage_client.list_buckets()))
         bucket = storage_client.get_bucket(bucket_name)
         blob = bucket.blob(blob_name)
         blob.upload_from_filename(path_to_file)
