@@ -33,5 +33,4 @@ def speech_to_text():
 
 @app.route('/')
 def main():
-	gcp_controller.upload_file("../api/text-to-speech/grandpa1hp.mp3")
 	return "this is anytalk backend \n"

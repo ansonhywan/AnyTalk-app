@@ -1,4 +1,3 @@
-from datetime import datetime
 from google.cloud import texttospeech, speech, storage
 
 class GCP_utils:
@@ -16,5 +15,8 @@ class GCP_utils:
         bucket = self.storage_client.get_bucket("anytalk-mp3s")
         blob = bucket.blob("mp3s/testfile.mp3")
         blob.upload_from_filename(path_to_file)
-        print(blob.download_to_filename())
         return blob.public_url
+
+    def file_exists(self, path_to_file):
+        bucket = self.storage_client.get_bucket("anytalk-mp3s")
+        return bucket.blob(path_to_file).exists()
