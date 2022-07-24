@@ -20,6 +20,19 @@ const App = () => {
       <View style={styles.body}>
         <View style={styles.title_view}>
           <Text style={styles.title}>AnyTalk</Text>
+          <View style={styles.text_view}>
+            <Text style={styles.translated_text}>
+              Translated Speech-to-Text will be displayed here. Make custom
+              component if we have time.Lorem ipsum dolor sit amet, consectetur
+              adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat. Duis aute irure dolor in reprehenderit in voluptate
+              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+              occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.
+            </Text>
+          </View>
         </View>
         <View style={styles.input_view}>
           <TextInput
@@ -101,10 +114,20 @@ const styles = StyleSheet.create({
   title_view: {
     flex: 1,
     backgroundColor: '#a29bfe',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text_view: {
+    flex: 1,
+    padding: 30,
+    backgroundColor: '#ffeaa7',
   },
   title: {
     fontSize: 30,
     fontWeight: 'bold',
+  },
+  translated_text: {
+    fontSize: 20,
   },
   input_view: {
     backgroundColor: '#dfe6e9',
