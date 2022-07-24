@@ -2,16 +2,25 @@ import * as functions from './src/utils/AudioUtils';
 import FlatButton from './src/components/button';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import SoundPlayer from 'react-native-sound-player';
+import * as ApiHelperFunctions from './src/utils/ApiUtils';
 
 import React, {useState} from 'react';
 
-import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Alert,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
 
 const App = () => {
   const [text, setText] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
+  const [speechUrl, setSpeechUrl] = useState('');
   const [convertButtonText, setConvertButtonText] = useState('C');
   const [recordButtonText, setRecordButtonText] = useState('R');
 
@@ -50,20 +59,21 @@ const App = () => {
                     setConvertButtonText('P');
                     // MAKE TEXT TO SPEECH API CALL HERE
                     // 1. Construct JSON BODY
-                    /*
-                    {
-                      text: "Text to convert."
-                    }
-                    */
+                    var req_body = {
+                      text: text,
+                    };
                     // 2. Make GET Request to TS API sending ('GET', req_body)
-                    // 3. When result is received, display toast.play it.
-                    console.log(text);
-                  } else {
-                    setConvertButtonText('C');
-                    SoundPlayer.playUrl(
-                      'https://storage.googleapis.com/anytalk-mp3s/20220723-205832.mp3',
+                    ApiHelperFunctions.getSpeechFromText(req_body).then(
+                      result => {
+                        setSpeechUrl(result);
+                      },
                     );
-                    // Play received file here.
+                    // 3. When result is received, display toast.play it.
+                  } else {
+                    // Play speech sound from url received here.
+                    console.log(speechUrl);
+                    setConvertButtonText('C');
+                    SoundPlayer.playUrl(speechUrl);
                   }
                 }}
               />
