@@ -1,5 +1,7 @@
 from google.cloud import texttospeech, speech, storage
 from datetime import datetime
+import subprocess
+import os
 
 class GCP_utils:
     '''
@@ -20,10 +22,14 @@ class GCP_utils:
                                                      voice=voice_config, 
                                                      audio_config=audio_config)
         timestr = datetime.now().strftime("%Y%m%d-%H%M%S")
-        speech_dir = timestr + '.mp3'
-        with open(speech_dir, "wb") as speech_mp3:
+        mp3_dir = timestr + '.mp3'
+        flac_dir = timestr + '.flac'
+        
+        with open(mp3_dir, "wb") as speech_mp3:
             speech_mp3.write(response.audio_content)
-        return speech_dir
+            self.convert_to_audio(mp3_dir, flac_dir)
+            os.remove(mp3_dir)
+        return flac_dir
 
     def convert_s2t(self, speech_uri):
         audio = speech.RecognitionAudio(uri=speech_uri)
@@ -35,11 +41,15 @@ class GCP_utils:
         response = self.s2t_client.recognize(config=config, audio=audio)
         return response.results[0].alternatives[0].transcript
 
+    def convert_to_audio(self, speech_dir, target_dir):
+        subprocess.call(['ffmpeg', '-i', speech_dir, '-ar', '16000', target_dir])
+
     def upload_file(self, path_to_file):
         print("buckets = {}".format(list(self.storage_client.list_buckets())))
         bucket = self.storage_client.get_bucket("anytalk-mp3s")
         blob = bucket.blob(path_to_file)
         blob.upload_from_filename(path_to_file)
+        os.remove(path_to_file)
         blob.make_public()
         return blob.public_url
 
