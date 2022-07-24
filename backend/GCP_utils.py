@@ -46,3 +46,9 @@ class GCP_utils:
     def file_exists(self, path_to_file):
         bucket = self.storage_client.get_bucket("anytalk-mp3s")
         return bucket.blob(path_to_file).exists()
+
+    def get_blob_URI(self, blob_name):
+        bucket = self.storage_client.get_bucket(self.bucket_name)
+        blob = bucket.blob(blob_name)
+        link = blob.path_helper(self.bucket_name, blob_name)
+        return 'gs://' + link
