@@ -51,5 +51,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSMicrophoneUsageDescription</key> <string>${PRODUCT_NAME} wants to have access to microphone</string>
 </dict>
 </plist>
