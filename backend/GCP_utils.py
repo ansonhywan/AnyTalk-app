@@ -6,6 +6,7 @@ class GCP_utils:
     Utility object to interact with GCP Cloud ServicesAPI
     '''
     def __init__(self):
+        self.bucket_name = "anytalk-mp3s"
         self.t2s_client = texttospeech.TextToSpeechClient()
         self.s2t_client = speech.SpeechClient()
         self.storage_client = storage.Client.from_service_account_json('anytalk-gcp-cred.json')
@@ -15,18 +16,18 @@ class GCP_utils:
         voice_name = "en-US-Wavenet-D" if gender == 'male' else "en-US-Wavenet-E"
         voice_config = texttospeech.VoiceSelectionParams(language_code="en-US",
                                                          name=voice_name)
-        audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.LINEAR16)
+        audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.MP3)
         response = self.t2s_client.synthesize_speech(input=synthesis_input, 
                                                      voice=voice_config, 
                                                      audio_config=audio_config)
         timestr = datetime.now().strftime("%Y%m%d-%H%M%S")
-        speech_dir = timestr + '.wav'
+        speech_dir = timestr + '.mp3'
         with open(speech_dir, "wb") as speech_mp3:
             speech_mp3.write(response.audio_content)
         return speech_dir
 
     def convert_s2t(self, speech_uri):
-        audio = speech.RecognitionAudio(uri=speech_uri)
+        audio = speech.RecognitionAudio(uri=self.get_gs_url(speech_uri))
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
             sample_rate_hertz=16000,
@@ -36,19 +37,15 @@ class GCP_utils:
         return response.results[0].alternatives[0].transcript
 
     def upload_file(self, path_to_file):
-        print("buckets = {}".format(list(self.storage_client.list_buckets())))
-        bucket = self.storage_client.get_bucket("anytalk-mp3s")
+        bucket = self.storage_client.get_bucket(self.bucket_name)
         blob = bucket.blob(path_to_file)
         blob.upload_from_filename(path_to_file)
         blob.make_public()
         return blob.public_url
 
     def file_exists(self, path_to_file):
-        bucket = self.storage_client.get_bucket("anytalk-mp3s")
+        bucket = self.storage_client.get_bucket(self.bucket_name)
         return bucket.blob(path_to_file).exists()
 
-    def get_blob_URI(self, blob_name):
-        bucket = self.storage_client.get_bucket(self.bucket_name)
-        blob = bucket.blob(blob_name)
-        link = blob.path_helper(self.bucket_name, blob_name)
-        return 'gs://' + link
+    def get_gs_url(self, blob_name):
+        return "gs://{}/{}".format(self.bucket_name, blob_name)
