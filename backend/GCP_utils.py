@@ -22,8 +22,7 @@ class GCP_utils:
         response = self.t2s_client.synthesize_speech(input=synthesis_input, 
                                                      voice=voice_config, 
                                                      audio_config=audio_config)
-        timestr = datetime.now().strftime("%Y%m%d-%H%M%S")
-        mp3_dir = timestr + '.mp3'
+        mp3_dir = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + '.mp3'
         with open(mp3_dir, "wb") as speech_mp3:
             speech_mp3.write(response.audio_content)
         return mp3_dir
