@@ -40,6 +40,7 @@ class GCP_utils:
         bucket = self.storage_client.get_bucket("anytalk-mp3s")
         blob = bucket.blob(path_to_file)
         blob.upload_from_filename(path_to_file)
+        blob.make_public()
         return blob.public_url
 
     def file_exists(self, path_to_file):
