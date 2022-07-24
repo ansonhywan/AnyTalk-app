@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "anytalk-356902",
+    "private_key_id": "81823ba0e01d82a15e8ccbd06758f44ac56db2f1",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCcQT1NM5xtofMH\nrTHg/IKfVxJXpZCs8E4koRyiq06iOlby4dlLiu/iMOvfAv9tHRc7b9NAuB6GxiZi\nBR7uniKULfcY3+FzwqUjvOk2+b7vQX/qNgvZd/iUF/tM4D9B+nvZDcw4RgHYk2my\n4zQki6oH28hCo7X4ipFY+JVbdIeXTJsbzs05FBETvVcpyCeTa3JLoR/+jMJvkNdx\nTcpY7ZIyqwUjsC+lYKBtZtDFCXM9Nkmavef8OPAo4ujDAfDSHwkdAa/SfzCFhOje\nlrfsBrAK3MeKZbeg2SfYAUuypGQA3+JUA5N8ne0vClldJVuA5/AVWLuowK4RpYq4\nshH08lUFAgMBAAECggEACL6m81/g0IroesTA3p5LIidBlcmkieUt/mNM4razISWi\nMZgdrNpi9/X0cWftyxm+b9tfh4b2YGUNB13RgBm2BjR3WHtJFw0s6E3dgG/kNWgl\nREKPkbVi4kjgTcpcB/GAhmJ9DCYw2sHPP81y4Nu3IZb1g3M9jyIUJdZNp49jOj6f\nKNfUdqSOGdzve+SiCNV6TO0srXXs+TLqobC2gHkdHgho2sTi09FgLTbG2E+5cqJc\ndl1O5D+Twi8qDW7fes+WL4xhC0GfAlfURou7g+tSPvbcDbfXzZEJwenVMrDTExnd\nwaXL1U0ntj1fm4YQfrPpFBZHUzX8J0j3spRVgxXGmQKBgQDLevN/xcOQfdLc9ROv\nbfBWRr4MGSWNg7lqyW5NOnoD+AWfnkyv6C66HAd2O+jQ/tiKar2e2LN3sn7aNPtJ\ndH2fGEnRux3PZRmAe/UYNJpnxVgEs0UX8BlL3t6+YZk3/JW5OVdJptbhfFZ+IZ6G\nj7k+4gVlQPOmkPTac7NaKI1vuQKBgQDEldjJL5wKh1xPd4Kw9sSdRf4QjchVqkHF\n2X4SpbGMBS3kv+EymTexeY/J/wc1mJw+aacIGdbRsqYjfL0lRIieaNabX3PJlMiL\nWFpkJrES37qb0W2/pYXsEJ2Uc6Tq3a2mRIfJHx49R3PhT+VEQCXBhA5vnt3yfgMR\nfoX/J5T9rQKBgQDG6CmffXLujBDUbb4QfyexLvYYXXyYGWvnN4DbfY5I0uqsXdIZ\nIp6Kz1t7+JRduMF0jWNPJAZLu/DE3YXHCFjEbLm8i21YjzuenY25W7KUPhUMgzHH\ndK1FvVeAQ2fDkuXJaoQpOy5SvXjPU43jfBtZnRgpIpUK/ihcYz2vpHSeAQKBgGiK\nEx1xrvY+Y01zDVHT+Fx2UxQ0gZtkjdOLxCpgaJlAS9aAX15L8jzzmw5dC1VqEXRz\nNLrvGriq2wS2GdOOrWQn9i/rw6Qn9bl8Q51Mog+aYB7qcQVgHWaas2G1Wbb4KZbo\njJjcbnVB4RKpLQ9tWWaeNhsPjZGdhz4vXUyBnQ6FAoGAc0lncml6GsGMlrvdYysy\n7s5HzizFiuqPOZj2fFH1RQ6SSs2CrlFfQMOTAHk5CTqygk8jk0xosV8PkoElruuh\nD+7ArYxZQOvxxEoSwB6YMWANXz1Qg5I6i4fj9cCcZb/0qfqK7cNQRWwg9U/nPnhs\nZVe6HrUqUXOLwrA2r5xTXio=\n-----END PRIVATE KEY-----\n",
+    "client_email": "anytalk-test@anytalk-356902.iam.gserviceaccount.com",
+    "client_id": "100559530391616872006",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/anytalk-test%40anytalk-356902.iam.gserviceaccount.com"
+  }
