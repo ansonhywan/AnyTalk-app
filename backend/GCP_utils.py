@@ -23,13 +23,9 @@ class GCP_utils:
                                                      audio_config=audio_config)
         timestr = datetime.now().strftime("%Y%m%d-%H%M%S")
         mp3_dir = timestr + '.mp3'
-        flac_dir = timestr + '.flac'
-        
         with open(mp3_dir, "wb") as speech_mp3:
             speech_mp3.write(response.audio_content)
-            self.convert_to_audio(mp3_dir, flac_dir)
-            os.remove(mp3_dir)
-        return flac_dir
+        return mp3_dir
 
     def convert_s2t(self, speech_uri):
         audio = speech.RecognitionAudio(uri=speech_uri)
