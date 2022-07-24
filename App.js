@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import type {Node} from 'react';
 
-import { Audio } from 'expo-av';
 import {
   Button,
   Pressable,
@@ -17,15 +16,16 @@ import {
   View,
 } from 'react-native';
 
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import * as functions from './src/utils/AudioUtils';
 import FlatButton from './src/components/button';
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import SoundPlayer from 'react-native-sound-player';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
 
 const App = () => {
   const [text, setText] = useState("");
-  const [recordingUrl, setRecordingUrl] = useState("No recordingUrl...");
+  const [recordingUrl, setRecordingUrl] = useState("");
   const [recordButtonText, setRecordButtonText] = useState("R")
     
   return (
@@ -35,6 +35,9 @@ const App = () => {
           <Text style={styles.title}>
             AnyTalk
           </Text>
+          <FlatButton text='Play' onPress={() => {
+            SoundPlayer.playUrl('https://storage.googleapis.com/anytalk-mp3s/20220723-205832.mp3')
+          }} />
         </View>
         <View style={styles.input_view}>
             <TextInput 
