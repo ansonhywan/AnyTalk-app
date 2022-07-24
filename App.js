@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
 import type {Node} from 'react';
+
+import { Audio } from 'expo-av';
 import {
   Button,
   Pressable,
@@ -14,44 +16,18 @@ import {
   //useColorScheme,
   View,
 } from 'react-native';
+
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import * as functions from './src/utils/AudioUtils';
 import FlatButton from './src/components/button';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+const audioRecorderPlayer = new AudioRecorderPlayer();
 
 const App = () => {
   const [text, setText] = useState("");
+  const [recordingUrl, setRecordingUrl] = useState("No recordingUrl...");
+  const [recordButtonText, setRecordButtonText] = useState("R")
+    
   return (
     <SafeAreaView style={styles.safe_area}>
       <View style={styles.body}>
@@ -69,10 +45,26 @@ const App = () => {
               />
             <View style={styles.button_view}>
               <View style={styles.button}>
-                <FlatButton text='Convert' onPress={() => console.log(text)} />
+                <FlatButton text='C' onPress={() => console.log(text)} />
               </View> 
               <View style={styles.button}>
-                <FlatButton text='Receive' onPress={() => console.log(text)} />
+                <FlatButton text={recordButtonText} onPress={() => {
+                  console.log(recordingUrl)
+                  if (recordButtonText === "R") {
+                    functions.onStartRecord(audioRecorderPlayer).then(result => setRecordingUrl(result))
+                    setRecordButtonText("S")
+                  } else {
+                    functions.onStopRecord(audioRecorderPlayer)
+                    setRecordButtonText("R")
+                    console.log(recordingUrl)
+                  }
+                }} />
+              </View>
+              <View style={styles.button}>
+                <FlatButton text='P' onPress={() => {
+                  functions.onStartPlay(audioRecorderPlayer)
+                  console.log(recordingUrl)
+                }} />
               </View>
           </View>
         </View>
