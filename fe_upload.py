@@ -1,10 +1,12 @@
 import os
 from sys import argv
 from google.cloud import storage
+from datetime import datetime
+
 
 def upload_file(storage_client, bucket_name, path_to_file):
     bucket = storage_client.get_bucket(bucket_name)
-    blob = bucket.blob(path_to_file)
+    blob = bucket.blob("{}.m4a".format(datetime.now().strftime("%Y-%m-%d_%H:%M:%S")))
     blob.upload_from_filename(path_to_file)
     # os.remove(path_to_file)
     blob.make_public()
