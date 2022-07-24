@@ -8,6 +8,7 @@ class GCP_utils:
     Utility object to interact with GCP Cloud ServicesAPI
     '''
     def __init__(self):
+        self.bucket_name = "anytalk-mp3s"
         self.t2s_client = texttospeech.TextToSpeechClient()
         self.s2t_client = speech.SpeechClient()
         self.storage_client = storage.Client.from_service_account_json('anytalk-gcp-cred.json')
@@ -28,7 +29,7 @@ class GCP_utils:
         return mp3_dir
 
     def convert_s2t(self, speech_uri):
-        audio = speech.RecognitionAudio(uri=speech_uri)
+        audio = speech.RecognitionAudio(uri=self.get_gs_url(speech_uri))
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
             sample_rate_hertz=16000,
@@ -41,8 +42,7 @@ class GCP_utils:
         subprocess.call(['ffmpeg', '-i', speech_dir, '-ar', '16000', target_dir])
 
     def upload_file(self, path_to_file):
-        print("buckets = {}".format(list(self.storage_client.list_buckets())))
-        bucket = self.storage_client.get_bucket("anytalk-mp3s")
+        bucket = self.storage_client.get_bucket(self.bucket_name)
         blob = bucket.blob(path_to_file)
         blob.upload_from_filename(path_to_file)
         os.remove(path_to_file)
@@ -50,5 +50,8 @@ class GCP_utils:
         return blob.public_url
 
     def file_exists(self, path_to_file):
-        bucket = self.storage_client.get_bucket("anytalk-mp3s")
+        bucket = self.storage_client.get_bucket(self.bucket_name)
         return bucket.blob(path_to_file).exists()
+
+    def get_gs_url(self, blob_name):
+        return "gs://{}/{}".format(self.bucket_name, blob_name)
