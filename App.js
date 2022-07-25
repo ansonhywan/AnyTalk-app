@@ -19,6 +19,8 @@ const audioRecorderPlayer = new AudioRecorderPlayer();
 
 const App = () => {
   const [text, setText] = useState('');
+  const [textFromSpeech, setTextFromSpeech] = useState('');
+  const [remotePath, setRemotePath] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
   const [speechUrl, setSpeechUrl] = useState('');
   const [convertButtonText, setConvertButtonText] = useState('C');
@@ -30,21 +32,14 @@ const App = () => {
         <View style={styles.title_view}>
           <Text style={styles.title}>AnyTalk</Text>
           <View style={styles.text_view}>
-            <Text style={styles.translated_text}>
-              Translated Speech-to-Text will be displayed here. Make custom
-              component if we have time.Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat. Duis aute irure dolor in reprehenderit in voluptate
-              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-              occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.
-            </Text>
+            <Text style={styles.translated_text}>{textFromSpeech}</Text>
           </View>
         </View>
         <View style={styles.input_view}>
           <TextInput
+            ref={input => {
+              this.textInput = input;
+            }}
             style={styles.input}
             multiline={true}
             placeholder="Type text to be read aloud..."
@@ -68,7 +63,7 @@ const App = () => {
                         setSpeechUrl(result);
                       },
                     );
-                    // 3. When result is received, display toast.play it.
+                    this.textInput.clear();
                   } else {
                     // Play speech sound from url received here.
                     console.log(speechUrl);
@@ -92,6 +87,15 @@ const App = () => {
                     functions.onStopRecord(audioRecorderPlayer);
                     setRecordButtonText('R');
                     console.log(recordingUrl);
+                    ApiHelperFunctions.uploadAudioToBucket({
+                      local_path: recordingUrl,
+                    }).then(result => {
+                      ApiHelperFunctions.getTextFromSpeech({
+                        speech_path: result,
+                      }).then(result2 => {
+                        setTextFromSpeech(result2);
+                      });
+                    });
                   }
                 }}
               />
