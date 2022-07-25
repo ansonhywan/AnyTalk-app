@@ -20,10 +20,8 @@ const audioRecorderPlayer = new AudioRecorderPlayer();
 const App = () => {
   const [text, setText] = useState('');
   const [textFromSpeech, setTextFromSpeech] = useState('');
-  const [remotePath, setRemotePath] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
   const [speechUrl, setSpeechUrl] = useState('');
-  const [convertButtonText, setConvertButtonText] = useState('C');
   const [recordButtonText, setRecordButtonText] = useState('Record');
 
   return (
