@@ -21,8 +21,7 @@ const App = () => {
   const [text, setText] = useState('');
   const [textFromSpeech, setTextFromSpeech] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
-  const [speechUrl, setSpeechUrl] = useState('');
-  const [recordButtonText, setRecordButtonText] = useState('Record');
+  const [recordButtonText, setRecordButtonText] = useState('R');
 
   return (
     <SafeAreaView style={styles.safe_area}>
@@ -56,8 +55,7 @@ const App = () => {
                   // 2. Make GET Request to TS API sending ('GET', req_body)
                   ApiHelperFunctions.getSpeechFromText(req_body).then(
                     result => {
-                      setSpeechUrl(result);
-                      SoundPlayer.playUrl(speechUrl);
+                      SoundPlayer.playUrl(result);
                     },
                   );
                   this.textInput.clear();
@@ -69,14 +67,14 @@ const App = () => {
                 text={recordButtonText}
                 onPress={() => {
                   console.log(recordingUrl);
-                  if (recordButtonText === 'Record') {
+                  if (recordButtonText === 'R') {
                     functions
                       .onStartRecord(audioRecorderPlayer)
                       .then(result => setRecordingUrl(result));
                     setRecordButtonText('Stop');
                   } else {
                     functions.onStopRecord(audioRecorderPlayer);
-                    setRecordButtonText('Record');
+                    setRecordButtonText('R');
                     console.log(recordingUrl);
                     ApiHelperFunctions.uploadAudioToBucket({
                       local_path: recordingUrl,
