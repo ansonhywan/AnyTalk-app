@@ -24,7 +24,7 @@ const App = () => {
   const [recordingUrl, setRecordingUrl] = useState('');
   const [speechUrl, setSpeechUrl] = useState('');
   const [convertButtonText, setConvertButtonText] = useState('C');
-  const [recordButtonText, setRecordButtonText] = useState('R');
+  const [recordButtonText, setRecordButtonText] = useState('Record');
 
   return (
     <SafeAreaView style={styles.safe_area}>
@@ -48,28 +48,21 @@ const App = () => {
           <View style={styles.button_view}>
             <View style={styles.button}>
               <FlatButton
-                text={convertButtonText}
+                text="C"
                 onPress={() => {
-                  if (convertButtonText === 'C') {
-                    setConvertButtonText('P');
-                    // MAKE TEXT TO SPEECH API CALL HERE
-                    // 1. Construct JSON BODY
-                    var req_body = {
-                      text: text,
-                    };
-                    // 2. Make GET Request to TS API sending ('GET', req_body)
-                    ApiHelperFunctions.getSpeechFromText(req_body).then(
-                      result => {
-                        setSpeechUrl(result);
-                      },
-                    );
-                    this.textInput.clear();
-                  } else {
-                    // Play speech sound from url received here.
-                    console.log(speechUrl);
-                    setConvertButtonText('C');
-                    SoundPlayer.playUrl(speechUrl);
-                  }
+                  // MAKE TEXT TO SPEECH API CALL HERE
+                  // 1. Construct JSON BODY
+                  var req_body = {
+                    text: text,
+                  };
+                  // 2. Make GET Request to TS API sending ('GET', req_body)
+                  ApiHelperFunctions.getSpeechFromText(req_body).then(
+                    result => {
+                      setSpeechUrl(result);
+                      SoundPlayer.playUrl(speechUrl);
+                    },
+                  );
+                  this.textInput.clear();
                 }}
               />
             </View>
@@ -78,14 +71,14 @@ const App = () => {
                 text={recordButtonText}
                 onPress={() => {
                   console.log(recordingUrl);
-                  if (recordButtonText === 'R') {
+                  if (recordButtonText === 'Record') {
                     functions
                       .onStartRecord(audioRecorderPlayer)
                       .then(result => setRecordingUrl(result));
-                    setRecordButtonText('S');
+                    setRecordButtonText('Stop');
                   } else {
                     functions.onStopRecord(audioRecorderPlayer);
-                    setRecordButtonText('R');
+                    setRecordButtonText('Record');
                     console.log(recordingUrl);
                     ApiHelperFunctions.uploadAudioToBucket({
                       local_path: recordingUrl,
