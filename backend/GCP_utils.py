@@ -28,6 +28,7 @@ class GCP_utils:
         return mp3_dir
 
     def convert_s2t(self, speech_uri):
+        print(self.get_gs_url(speech_uri))
         audio = speech.RecognitionAudio(uri=self.get_gs_url(speech_uri))
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
@@ -35,10 +36,8 @@ class GCP_utils:
             language_code="en-US",
         )
         response = self.s2t_client.recognize(config=config, audio=audio)
+        print(response)
         return response.results[0].alternatives[0].transcript
-
-    def convert_to_audio(self, speech_dir, target_dir):
-        subprocess.call(['ffmpeg', '-i', speech_dir, '-ar', '16000', target_dir])
 
     def upload_file(self, path_to_file):
         bucket = self.storage_client.get_bucket(self.bucket_name)

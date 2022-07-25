@@ -22,14 +22,10 @@ def text_to_speech():
 @app.route('/speech_to_text/', methods=['GET', 'POST'])
 def speech_to_text():
 	speech_path = request.json.get("speech_path")
+	print("{}{}".format(50*"=", speech_path))
 	if speech_path == None: return json.dumps({"error": "must specify speech path in body"})
 	if not speech_path.endswith(".flac"): return json.dumps({"error": "speech file must end with .flac"})
-
-	try:
-		text = gcp_controller.convert_s2t(speech_path)
-	except Exception as e:
-		return json.dumps({"error": e.__class__})
-
+	text = gcp_controller.convert_s2t(speech_path)
 	return json.dumps({
 		"text": text,
 		"error": None
