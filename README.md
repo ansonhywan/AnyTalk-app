@@ -1,10 +1,9 @@
-<<<<<<< HEAD
-# AnyTalk - test
-=======
 # Setup
 
-1. Setup & install react native environment: https://reactnative.dev/docs/environment-setup
-2. Run `npx react-native run-ios`
+
+1. Clone this repo
+2. Setup & install react native environment: https://reactnative.dev/docs/environment-setup
+3. Run `npx react-native run-ios`
 
 ### Common Errors when trying `npx react-native run-ios`
 
@@ -17,4 +16,3 @@
 
 3. Some other error we don't remember
 - XCode > Preferences > Locations > Click the dropdown next to "Command Line Tools" and select the same version the mac should prompt for password or fingerprint
->>>>>>> 9c9abfd (Add setup instructions to README)
