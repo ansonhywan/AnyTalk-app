@@ -1,10 +1,10 @@
 import * as functions from './src/utils/AudioUtils';
-import FlatButton from './src/components/button';
+import Button from './src/components/button';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import SoundPlayer from 'react-native-sound-player';
 import * as ApiHelperFunctions from './src/utils/ApiUtils';
 
-import React, {useState} from 'react';
+import React, {useState} from 'react'; 
 
 import {
   Alert,
@@ -21,18 +21,28 @@ const App = () => {
   const [text, setText] = useState('');
   const [textFromSpeech, setTextFromSpeech] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
-  const [recordButtonText, setRecordButtonText] = useState('R');
+  const [recordButtonText, setRecordButtonText] = useState('Record');
+  const [titleText, setTitleText] = useState("AnyTalk");
+  const [convertButtonText, setConvertButtonText] = useState("Convert");
+  const [clearButtonText, setClearButtonText] = useState("Clear");
 
   return (
     <SafeAreaView style={styles.safe_area}>
       <View style={styles.body}>
+
         <View style={styles.title_view}>
-          <Text style={styles.title}>AnyTalk</Text>
+          <Text style={styles.titleText}>
+            {'\n'}
+            {titleText}
+            {'\n'}
+            </Text>
           <View style={styles.text_view}>
             <Text style={styles.translated_text}>{textFromSpeech}</Text>
           </View>
         </View>
+
         <View style={styles.input_view}>
+
           <TextInput
             ref={input => {
               this.textInput = input;
@@ -42,9 +52,13 @@ const App = () => {
             placeholder="Type text to be read aloud..."
             onChangeText={newText => setText(newText)}
           />
+
           <View style={styles.button_view}>
+
             <View style={styles.button}>
-              <FlatButton
+
+
+              <Button // Convert T2S (entered text)
                 text="C"
                 onPress={() => {
                   // MAKE TEXT TO SPEECH API CALL HERE
@@ -61,20 +75,23 @@ const App = () => {
                   this.textInput.clear();
                 }}
               />
+            
+
             </View>
+
             <View style={styles.button}>
-              <FlatButton
-                text={recordButtonText}
+              <Button // Convert S2T (recording)
+                text="R"
                 onPress={() => {
                   console.log(recordingUrl);
-                  if (recordButtonText === 'R') {
+                  if (recordButtonText === 'Record') {
                     functions
                       .onStartRecord(audioRecorderPlayer)
                       .then(result => setRecordingUrl(result));
                     setRecordButtonText('Stop');
                   } else {
                     functions.onStopRecord(audioRecorderPlayer);
-                    setRecordButtonText('R');
+                    setRecordButtonText('Record');
                     console.log(recordingUrl);
                     ApiHelperFunctions.uploadAudioToBucket({
                       local_path: recordingUrl,
@@ -89,17 +106,21 @@ const App = () => {
                 }}
               />
             </View>
+
             <View style={styles.button}>
-              <FlatButton
+              <Button // Clear text in input area
                 text="X"
                 onPress={() => {
-                  functions.onStartPlay(audioRecorderPlayer);
+                  functions.onStartPlay(audioRecorderPlayer); // is this copied from record? we should only clear right
                   console.log(recordingUrl);
                 }}
               />
             </View>
+
           </View>
+
         </View>
+
       </View>
     </SafeAreaView>
   );
@@ -113,17 +134,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#81ecec',
     alignItems: 'center',
+    padding: 10,
   },
   title_view: {
     flex: 1,
     backgroundColor: '#a29bfe',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 10,
   },
   text_view: {
     flex: 1,
-    padding: 30,
-    backgroundColor: '#ffeaa7',
+    padding: 70,
+    backgroundColor: '#ffeaa7'
   },
   title: {
     fontSize: 30,
@@ -154,6 +177,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#55efc4',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  titleText: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    fontFamily: 'Futura',
+  },
+  recordButtonText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    fontFamily: 'Futura',
+  },
+  convertButtonText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    fontFamily: 'Futura',
+  },
+  clearButtonText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    fontFamily: 'Futura',
   },
 });
 
