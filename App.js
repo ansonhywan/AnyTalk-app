@@ -28,9 +28,11 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.safe_area}>
+
       <View style={styles.body}>
 
         <View style={styles.title_view}>
+          
           <Text style={styles.titleText}>
             {'\n'}
             {titleText}
@@ -132,21 +134,21 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: '#81ecec',
+    backgroundColor: '#89CFF0',
     alignItems: 'center',
     padding: 10,
   },
   title_view: {
     flex: 1,
-    backgroundColor: '#a29bfe',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
   },
   text_view: {
     flex: 1,
-    padding: 70,
-    backgroundColor: '#ffeaa7'
+    padding: 150,
+    borderRadius: 10,
+    backgroundColor: '#CCCCFF'
   },
   title: {
     fontSize: 30,
@@ -156,7 +158,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   input_view: {
-    backgroundColor: '#dfe6e9',
     flex: 0.5,
   },
   button_view: {
@@ -168,13 +169,15 @@ const styles = StyleSheet.create({
     width: 300,
     height: 150,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 10,
+    borderColor: '#7393B3',
+    backgroundColor: 'white',
     padding: 10,
     textAlignVertical: 'top',
   },
   button: {
     flex: 1,
-    backgroundColor: '#55efc4',
+    backgroundColor: '#89CFF0',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -186,17 +189,17 @@ const styles = StyleSheet.create({
   recordButtonText: {
     fontSize: 10,
     fontWeight: 'bold',
-    fontFamily: 'Futura',
+    fontFamily: 'Verdana',
   },
   convertButtonText: {
     fontSize: 10,
     fontWeight: 'bold',
-    fontFamily: 'Futura',
+    fontFamily: 'Verdana',
   },
   clearButtonText: {
     fontSize: 10,
     fontWeight: 'bold',
-    fontFamily: 'Futura',
+    fontFamily: 'Verdana',
   },
 });
 
