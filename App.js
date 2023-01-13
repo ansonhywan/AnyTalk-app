@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   titleText: {
-    fontSize: 40,
+    fontSize: 45,
     fontWeight: 'bold',
     fontFamily: 'Futura',
   },
