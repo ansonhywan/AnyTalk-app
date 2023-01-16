@@ -29,17 +29,14 @@ const App = () => {
       <View style={styles.body}>
 
         <View style={styles.title_view}>
-
           <Image source={require('./fe-resources/AnyTalk-1.png')} />
+        </View>
 
-          <View style={styles.text_view}>
-            <Text style={styles.translated_text}>{textFromSpeech}</Text>
-          </View>
-
+        <View style={styles.chat_view}>
+          <Text style={styles.translated_text}>{textFromSpeech}</Text>
         </View>
 
         <View style={styles.input_view}>
-
           <TextInput
             ref={input => {
               this.textInput = input;
@@ -49,72 +46,64 @@ const App = () => {
             placeholder="Type text to be read aloud..."
             onChangeText={newText => setText(newText)}
           />
-
-          <View style={styles.button_view}>
-
-            <View style={styles.button}>
-
-              <Button // Convert T2S (entered text)
-                text="C"
-                onPress={() => {
-                  // MAKE TEXT TO SPEECH API CALL HERE
-                  // 1. Construct JSON BODY
-                  var req_body = {
-                    text: text,
-                  };
-                  // 2. Make GET Request to TS API sending ('GET', req_body)
-                  ApiHelperFunctions.getSpeechFromText(req_body).then(
-                    result => {
-                      SoundPlayer.playUrl(result);
-                    },
-                  );
-                  this.textInput.clear();
-                }}
-              />
-
-            </View>
-
-            <View style={styles.button}>
-              <Button // Convert S2T (recording)
-                text="R"
-                onPress={() => {
-                  console.log(recordingUrl);
-                  if (recordButtonText === 'Record') {
-                    functions
-                      .onStartRecord(audioRecorderPlayer)
-                      .then(result => setRecordingUrl(result));
-                    setRecordButtonText('Stop');
-                  } else {
-                    functions.onStopRecord(audioRecorderPlayer);
-                    setRecordButtonText('Record');
-                    console.log(recordingUrl);
-                    ApiHelperFunctions.uploadAudioToBucket({
-                      local_path: recordingUrl,
-                    }).then(result => {
-                      ApiHelperFunctions.getTextFromSpeech({
-                        speech_path: result,
-                      }).then(result2 => {
-                        setTextFromSpeech(result2);
-                      });
-                    });
-                  }
-                }}
-              />
-            </View>
-
-            <View style={styles.button}>
-              <Button // Clear text in input area
-                text="X"
-                onPress={() => {
-                  functions.onStartPlay(audioRecorderPlayer); // is this copied from record? we should only clear right
-                  console.log(recordingUrl);
-                }}
-              />
-
-            </View>
-
+        </View>
+        
+        <View style={styles.button_view}>
+          <View style={styles.button}>
+            <Button // Convert T2S (entered text)
+              text="C"
+              onPress={() => {
+                // MAKE TEXT TO SPEECH API CALL HERE
+                // 1. Construct JSON BODY
+                var req_body = {
+                  text: text,
+                };
+                // 2. Make GET Request to TS API sending ('GET', req_body)
+                ApiHelperFunctions.getSpeechFromText(req_body).then(
+                  result => {
+                    SoundPlayer.playUrl(result);
+                  },
+                );
+                this.textInput.clear();
+              }}
+            />
           </View>
-
+          <View style={styles.button}>
+            <Button // Convert S2T (recording)
+              text="R"
+              onPress={() => {
+                console.log(recordingUrl);
+                if (recordButtonText === 'Record') {
+                  functions
+                    .onStartRecord(audioRecorderPlayer)
+                    .then(result => setRecordingUrl(result));
+                  setRecordButtonText('Stop');
+                } else {
+                  functions.onStopRecord(audioRecorderPlayer);
+                  setRecordButtonText('Record');
+                  console.log(recordingUrl);
+                  ApiHelperFunctions.uploadAudioToBucket({
+                    local_path: recordingUrl,
+                  }).then(result => {
+                    ApiHelperFunctions.getTextFromSpeech({
+                      speech_path: result,
+                    }).then(result2 => {
+                      setTextFromSpeech(result2);
+                    });
+                  });
+                }
+              }}
+            />
+          </View>
+          <View style={styles.button}>
+            <Button // Clear text in input area
+              text="X"
+              onPress={() => {
+                functions.onStartPlay(audioRecorderPlayer); // is this copied from record? we should only clear right
+                console.log(recordingUrl);
+              }}
+            />
+          </View>
         </View>
 
       </View>
@@ -137,23 +126,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
   },
-  text_view: {
-    flex: 1,
+  chat_view: {
+    flex: 0.2,
     padding: 150,
-    borderRadius: 10,
-    backgroundColor: 'white'
+    borderRadius: 25,
+    backgroundColor: 'white',
+    margin: 10,
   },
   translated_text: {
     fontSize: 20,
   },
   input_view: {
-    flex: 0.5,
-  },
-  button_view: {
     flex: 1,
-    flexDirection: 'row',
   },
   input: {
     flex: 1,
@@ -166,11 +151,16 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlignVertical: 'top',
   },
+  button_view: {
+    flex: 0.5,
+    flexDirection: 'row',
+  },
   button: {
-    flex: 1,
+    flex: 0.5,
     backgroundColor: '#003452',
     alignItems: 'center',
     justifyContent: 'center',
+    color: '#38b6ff',
   },
 });
 
