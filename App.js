@@ -4,7 +4,7 @@ import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import SoundPlayer from 'react-native-sound-player';
 import * as ApiHelperFunctions from './src/utils/ApiUtils';
 
-import React, {useState} from 'react'; 
+import React, { useState } from 'react';
 
 import {
   Alert,
@@ -13,6 +13,7 @@ import {
   Text,
   TextInput,
   View,
+  Image,
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
@@ -32,15 +33,22 @@ const App = () => {
       <View style={styles.body}>
 
         <View style={styles.title_view}>
-          
-          <Text style={styles.titleText}>
+
+          <Image
+            source={require('./fe-resources/AnyTalk-1.png')}
+            style={{ width: 500, height: 70 }}
+          />
+
+          {/*           <Text style={styles.titleText}>
             {'\n'}
             {titleText}
             {'\n'}
-            </Text>
+          </Text> */}
+
           <View style={styles.text_view}>
             <Text style={styles.translated_text}>{textFromSpeech}</Text>
           </View>
+
         </View>
 
         <View style={styles.input_view}>
@@ -59,7 +67,6 @@ const App = () => {
 
             <View style={styles.button}>
 
-
               <Button // Convert T2S (entered text)
                 text="C"
                 onPress={() => {
@@ -77,7 +84,6 @@ const App = () => {
                   this.textInput.clear();
                 }}
               />
-            
 
             </View>
 
@@ -117,6 +123,7 @@ const App = () => {
                   console.log(recordingUrl);
                 }}
               />
+
             </View>
 
           </View>
@@ -124,6 +131,7 @@ const App = () => {
         </View>
 
       </View>
+
     </SafeAreaView>
   );
 };
@@ -134,7 +142,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: '#89CFF0',
+    backgroundColor: '#ade1ff', //89CFF0
     alignItems: 'center',
     padding: 10,
   },
@@ -177,7 +185,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    backgroundColor: '#89CFF0',
+    backgroundColor: '#ade1ff',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -185,21 +193,6 @@ const styles = StyleSheet.create({
     fontSize: 45,
     fontWeight: 'bold',
     fontFamily: 'Futura',
-  },
-  recordButtonText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    fontFamily: 'Verdana',
-  },
-  convertButtonText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    fontFamily: 'Verdana',
-  },
-  clearButtonText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    fontFamily: 'Verdana',
   },
 });
 
