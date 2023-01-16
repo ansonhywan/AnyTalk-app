@@ -23,10 +23,6 @@ const App = () => {
   const [textFromSpeech, setTextFromSpeech] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
   const [recordButtonText, setRecordButtonText] = useState('Record');
-  const [titleText, setTitleText] = useState("AnyTalk");
-  const [convertButtonText, setConvertButtonText] = useState("Convert");
-  const [clearButtonText, setClearButtonText] = useState("Clear");
-
   return (
     <SafeAreaView style={styles.safe_area}>
 
@@ -34,16 +30,7 @@ const App = () => {
 
         <View style={styles.title_view}>
 
-          <Image
-            source={require('./fe-resources/AnyTalk-1.png')}
-            style={{ width: 500, height: 70 }}
-          />
-
-          {/*           <Text style={styles.titleText}>
-            {'\n'}
-            {titleText}
-            {'\n'}
-          </Text> */}
+          <Image source={require('./fe-resources/AnyTalk-1.png')} />
 
           <View style={styles.text_view}>
             <Text style={styles.translated_text}>{textFromSpeech}</Text>
@@ -142,7 +129,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: '#ade1ff', //89CFF0
+    backgroundColor: '#003452', //89CFF0
     alignItems: 'center',
     padding: 10,
   },
@@ -156,11 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 150,
     borderRadius: 10,
-    backgroundColor: '#CCCCFF'
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    backgroundColor: 'white'
   },
   translated_text: {
     fontSize: 20,
@@ -185,14 +168,9 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    backgroundColor: '#ade1ff',
+    backgroundColor: '#003452',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  titleText: {
-    fontSize: 45,
-    fontWeight: 'bold',
-    fontFamily: 'Futura',
   },
 });
 
