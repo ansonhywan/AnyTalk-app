@@ -14,6 +14,9 @@ import {
   TextInput,
   View,
   Image,
+  Keyboard,
+  TouchableWithoutFeedback,
+  DismissKeyboard,
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
@@ -23,6 +26,7 @@ const App = () => {
   const [textFromSpeech, setTextFromSpeech] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
   const [recordButtonText, setRecordButtonText] = useState('Record');
+
   return (
     <SafeAreaView style={styles.safe_area}>
 
@@ -36,18 +40,22 @@ const App = () => {
           <Text style={styles.translated_text}>{textFromSpeech}</Text>
         </View>
 
-        <View style={styles.input_view}>
-          <TextInput
-            ref={input => {
-              this.textInput = input;
-            }}
-            style={styles.input}
-            multiline={true}
-            placeholder="Type text to be read aloud..."
-            onChangeText={newText => setText(newText)}
-          />
-        </View>
-        
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.input_view}>
+            <TextInput
+              ref={input => {
+                this.textInput = input;
+              }}
+              style={styles.input}
+              multiline={true}
+              placeholder="Type text to be read aloud..."
+              onChangeText={newText => setText(newText)}
+              returnKeyType='done'
+              onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
+            />
+          </View>
+        </TouchableWithoutFeedback>
+
         <View style={styles.button_view}>
           <View style={styles.button}>
             <Button // Convert T2S (entered text)
@@ -99,7 +107,7 @@ const App = () => {
             <Button // Clear text in input area
               text="X"
               onPress={() => {
-                functions.onStartPlay(audioRecorderPlayer); // is this copied from record? we should only clear right
+                functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
                 console.log(recordingUrl);
               }}
             />
@@ -118,7 +126,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: '#003452', //89CFF0
+    backgroundColor: '#003452',
     alignItems: 'center',
     padding: 10,
   },
