@@ -16,7 +16,6 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
-  DismissKeyboard,
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
