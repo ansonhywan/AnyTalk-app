@@ -1,10 +1,10 @@
 import * as functions from './src/utils/AudioUtils';
-import FlatButton from './src/components/button';
+import Button from './src/components/button';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import SoundPlayer from 'react-native-sound-player';
 import * as ApiHelperFunctions from './src/utils/ApiUtils';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
   Alert,
@@ -13,6 +13,10 @@ import {
   Text,
   TextInput,
   View,
+  Image,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
@@ -21,86 +25,99 @@ const App = () => {
   const [text, setText] = useState('');
   const [textFromSpeech, setTextFromSpeech] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
-  const [recordButtonText, setRecordButtonText] = useState('R');
+  const [recordButtonText, setRecordButtonText] = useState('Record');
 
   return (
     <SafeAreaView style={styles.safe_area}>
+
       <View style={styles.body}>
+
         <View style={styles.title_view}>
-          <Text style={styles.title}>AnyTalk</Text>
-          <View style={styles.text_view}>
-            <Text style={styles.translated_text}>{textFromSpeech}</Text>
-          </View>
+          <Image source={require('./fe-resources/AnyTalk-1.png')} />
         </View>
-        <View style={styles.input_view}>
-          <TextInput
-            ref={input => {
-              this.textInput = input;
-            }}
-            style={styles.input}
-            multiline={true}
-            placeholder="Type text to be read aloud..."
-            onChangeText={newText => setText(newText)}
-          />
-          <View style={styles.button_view}>
-            <View style={styles.button}>
-              <FlatButton
-                text="C"
-                onPress={() => {
-                  // MAKE TEXT TO SPEECH API CALL HERE
-                  // 1. Construct JSON BODY
-                  var req_body = {
-                    text: text,
-                  };
-                  // 2. Make GET Request to TS API sending ('GET', req_body)
-                  ApiHelperFunctions.getSpeechFromText(req_body).then(
-                    result => {
-                      SoundPlayer.playUrl(result);
-                    },
-                  );
-                  this.textInput.clear();
-                }}
-              />
-            </View>
-            <View style={styles.button}>
-              <FlatButton
-                text={recordButtonText}
-                onPress={() => {
-                  console.log(recordingUrl);
-                  if (recordButtonText === 'R') {
-                    functions
-                      .onStartRecord(audioRecorderPlayer)
-                      .then(result => setRecordingUrl(result));
-                    setRecordButtonText('Stop');
-                  } else {
-                    functions.onStopRecord(audioRecorderPlayer);
-                    setRecordButtonText('R');
-                    console.log(recordingUrl);
-                    ApiHelperFunctions.uploadAudioToBucket({
-                      local_path: recordingUrl,
-                    }).then(result => {
-                      ApiHelperFunctions.getTextFromSpeech({
-                        speech_path: result,
-                      }).then(result2 => {
-                        setTextFromSpeech(result2);
-                      });
-                    });
-                  }
-                }}
-              />
-            </View>
-            <View style={styles.button}>
-              <FlatButton
-                text="X"
-                onPress={() => {
-                  functions.onStartPlay(audioRecorderPlayer);
-                  console.log(recordingUrl);
-                }}
-              />
-            </View>
+
+        <View style={styles.chat_view}>
+          <Text style={styles.translated_text}>{textFromSpeech}</Text>
+        </View>
+
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.input_view}>
+            <TextInput
+              ref={input => {
+                this.textInput = input;
+              }}
+              style={styles.input}
+              multiline={true}
+              placeholder="Type text to be read aloud..."
+              onChangeText={newText => setText(newText)}
+              returnKeyType='done'
+              onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
+            />
           </View>
+        </TouchableWithoutFeedback>
+
+        <View style={styles.button_view}>
+          <View style={styles.button_row}>
+            <Button // Convert T2S (entered text)
+              text="Convert"
+              onPress={() => {
+                // MAKE TEXT TO SPEECH API CALL HERE
+                // 1. Construct JSON BODY
+                var req_body = {
+                  text: text,
+                };
+                // 2. Make GET Request to TS API sending ('GET', req_body)
+                ApiHelperFunctions.getSpeechFromText(req_body).then(
+                  result => {
+                    SoundPlayer.playUrl(result);
+                  },
+                );
+                this.textInput.clear();
+              }}
+            />
+          </View>
+
+          <View style={styles.button_row}>
+            <Button // Convert S2T (recording)
+              text="Record"
+              onPress={() => {
+                console.log(recordingUrl);
+                if (recordButtonText === 'Record') {
+                  functions
+                    .onStartRecord(audioRecorderPlayer)
+                    .then(result => setRecordingUrl(result));
+                  setRecordButtonText('Stop');
+                } else {
+                  functions.onStopRecord(audioRecorderPlayer);
+                  setRecordButtonText('Record');
+                  console.log(recordingUrl);
+                  ApiHelperFunctions.uploadAudioToBucket({
+                    local_path: recordingUrl,
+                  }).then(result => {
+                    ApiHelperFunctions.getTextFromSpeech({
+                      speech_path: result,
+                    }).then(result2 => {
+                      setTextFromSpeech(result2);
+                    });
+                  });
+                }
+              }}
+            />
+          </View>
+
+          <View style={styles.button_row}>
+            <Button
+              text="Clear"
+              onPress={() => {
+                functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
+                console.log(recordingUrl);
+              }}
+            />
+          </View>
+
         </View>
       </View>
+
     </SafeAreaView>
   );
 };
@@ -111,49 +128,50 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: '#81ecec',
+    backgroundColor: '#003452',
     alignItems: 'center',
+    padding: 10,
   },
   title_view: {
     flex: 1,
-    backgroundColor: '#a29bfe',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text_view: {
-    flex: 1,
-    padding: 30,
-    backgroundColor: '#ffeaa7',
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+  chat_view: {
+    width: 300,
+    height: 200,
+    padding: 75,
+    borderRadius: 25,
+    backgroundColor: 'white',
+    margin: 10,
+    textAlignVertical: 'top',
   },
   translated_text: {
     fontSize: 20,
   },
   input_view: {
-    backgroundColor: '#dfe6e9',
-    flex: 0.5,
-  },
-  button_view: {
-    flex: 1,
-    flexDirection: 'row',
+    flex: 2,
   },
   input: {
-    flex: 1,
     width: 300,
-    height: 150,
+    height: 300,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 10,
+    borderColor: '#7393B3',
+    backgroundColor: 'white',
     padding: 10,
     textAlignVertical: 'top',
   },
-  button: {
-    flex: 1,
-    backgroundColor: '#55efc4',
+  button_view: {
+    flex: 0.5,
+    flexDirection: 'row',
+  },
+  button_row: {
+    flex: 0.5,
+    backgroundColor: '#003452',
     alignItems: 'center',
     justifyContent: 'center',
+    color: '#38b6ff',
   },
 });
 
