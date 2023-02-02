@@ -16,6 +16,7 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
@@ -56,9 +57,9 @@ const App = () => {
         </TouchableWithoutFeedback>
 
         <View style={styles.button_view}>
-          <View style={styles.button}>
+          <View style={styles.button_row}>
             <Button // Convert T2S (entered text)
-              text="C"
+              text="Convert"
               onPress={() => {
                 // MAKE TEXT TO SPEECH API CALL HERE
                 // 1. Construct JSON BODY
@@ -75,9 +76,10 @@ const App = () => {
               }}
             />
           </View>
-          <View style={styles.button}>
+
+          <View style={styles.button_row}>
             <Button // Convert S2T (recording)
-              text="R"
+              text="Record"
               onPress={() => {
                 console.log(recordingUrl);
                 if (recordButtonText === 'Record') {
@@ -102,17 +104,18 @@ const App = () => {
               }}
             />
           </View>
-          <View style={styles.button}>
-            <Button // Clear text in input area
-              text="X"
+
+          <View style={styles.button_row}>
+            <Button
+              text="Clear"
               onPress={() => {
                 functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
                 console.log(recordingUrl);
               }}
             />
           </View>
-        </View>
 
+        </View>
       </View>
 
     </SafeAreaView>
@@ -135,22 +138,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   chat_view: {
-    flex: 0.2,
-    padding: 150,
+    width: 300,
+    height: 200,
+    padding: 75,
     borderRadius: 25,
     backgroundColor: 'white',
     margin: 10,
+    textAlignVertical: 'top',
   },
   translated_text: {
     fontSize: 20,
   },
   input_view: {
-    flex: 1,
+    flex: 2,
   },
   input: {
-    flex: 1,
     width: 300,
-    height: 150,
+    height: 300,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#7393B3',
@@ -162,7 +166,7 @@ const styles = StyleSheet.create({
     flex: 0.5,
     flexDirection: 'row',
   },
-  button: {
+  button_row: {
     flex: 0.5,
     backgroundColor: '#003452',
     alignItems: 'center',
