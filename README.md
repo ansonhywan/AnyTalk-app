@@ -3,7 +3,18 @@
 
 1. Clone this repo
 2. Setup & install react native environment: https://reactnative.dev/docs/environment-setup
-3. Run `npx react-native run-ios`
+3. Install backend dependancies:
+    1. `cd backend`
+    2. `pip3 install -r requirements.txt`
+4. Install `ffmpeg` system library
+    1. `brew install ffmpeg`
+5. Startup backend server
+   1. `cd backend`
+   2. `./run.sh`
+6. Startup `fe_upload` server
+   1. From root folder run: `python3 fe_upload.py`
+7. In a separate terminal start Metro by running `npx react-native start`
+8. In a separate terminal run `npx react-native run-ios` to run the AnyTalk App
 
 ### Common Errors when trying `npx react-native run-ios`
 
