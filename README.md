@@ -1,6 +1,5 @@
 # Setup
 
-
 1. Clone this repo
 2. Setup & install react native environment: https://reactnative.dev/docs/environment-setup
 3. Install backend dependancies:
@@ -12,7 +11,8 @@
    1. `cd backend`
    2. `./run.sh`
 6. Startup `fe_upload` server
-   1. From root folder run: `python3 fe_upload.py`
+   1. `cd frontend`
+   2. `python3 fe_upload.py`
 7. In a separate terminal start Metro by running `npx react-native start`
 8. In a separate terminal run `npx react-native run-ios` to run the AnyTalk App
 
@@ -27,3 +27,8 @@
 
 3. Some other error we don't remember
 - XCode > Preferences > Locations > Click the dropdown next to "Command Line Tools" and select the same version the mac should prompt for password or fingerprint
+
+4. Invalid `Podfile` file: cannot load such file -- /myPath/node_modules/react-native/scripts/react_native_pods
+- run `npm audit fix`
+- `cd ios`
+- run `pod install`
