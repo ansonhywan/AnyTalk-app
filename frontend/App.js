@@ -17,6 +17,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
@@ -40,23 +41,32 @@ const App = () => {
           <Text style={styles.translated_text}>{textFromSpeech}</Text>
         </View>
 
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={styles.input_view}>
-            <TextInput
-              ref={input => {
-                this.textInput = input;
-              }}
-              style={styles.input}
-              multiline={true}
-              placeholder="Type text to be read aloud..."
-              onChangeText={newText => setText(newText)}
-              returnKeyType='done'
-              onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
-            />
-          </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
+          <KeyboardAvoidingView
+            style={styles.input_view}
+            behavior={(Platform.OS === 'ios') ? "padding" : "height"}
+          >
+            <ScrollView>
+              <View style={{ height: 220 }}>
+                <TextInput
+                  ref={input => {
+                    this.textInput = input;
+                  }}
+                  style={styles.input}
+                  multiline={true}
+                  placeholder="Type text to be read aloud..."
+                  onChangeText={newText => setText(newText)}
+                  returnKeyType='done'
+                  onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
+                />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+
         </TouchableWithoutFeedback>
 
         <View style={styles.button_view}>
+
           <View style={styles.button_row}>
             <Button // Convert T2S (entered text)
               text="Convert"
@@ -66,6 +76,7 @@ const App = () => {
                 var req_body = {
                   text: text,
                 };
+                { setTextFromSpeech(text) }
                 // 2. Make GET Request to TS API sending ('GET', req_body)
                 ApiHelperFunctions.getSpeechFromText(req_body).then(
                   result => {
@@ -116,9 +127,10 @@ const App = () => {
           </View>
 
         </View>
-      </View>
 
-    </SafeAreaView>
+      </View >
+
+    </SafeAreaView >
   );
 };
 
@@ -133,14 +145,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title_view: {
-    flex: 1,
+    flex: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   chat_view: {
     width: 300,
-    height: 200,
-    padding: 75,
+    flex: 1,
+    padding: 20,
     borderRadius: 25,
     backgroundColor: 'white',
     margin: 10,
@@ -150,11 +162,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   input_view: {
-    flex: 2,
+    flex: 1,
   },
   input: {
     width: 300,
-    height: 300,
+    flex: 1,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#7393B3',
@@ -172,6 +184,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     color: '#38b6ff',
+    fontSize: '10',
   },
 });
 
