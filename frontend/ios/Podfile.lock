@@ -352,11 +352,6 @@ PODS:
     - React-perflogger (= 0.69.1)
   - RNAudioRecorderPlayer (3.5.1):
     - React-Core
-  - RNSound (0.11.2):
-    - React-Core
-    - RNSound/Core (= 0.11.2)
-  - RNSound/Core (0.11.2):
-    - React-Core
   - RNSoundPlayer (0.13.0):
     - React
   - SocketRocket (0.6.0)
@@ -421,7 +416,6 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
-  - RNSound (from `../node_modules/react-native-sound`)
   - RNSoundPlayer (from `../node_modules/react-native-sound-player`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -508,8 +502,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNAudioRecorderPlayer:
     :path: "../node_modules/react-native-audio-recorder-player"
-  RNSound:
-    :path: "../node_modules/react-native-sound"
   RNSoundPlayer:
     :path: "../node_modules/react-native-sound-player"
   Yoga:
@@ -561,7 +553,6 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 27f468c5576eaf05ffb7a907528e44c75a3fcbae
   ReactCommon: e30ec17dfb1d4c4f3419eac254350d6abca6d5a2
   RNAudioRecorderPlayer: 308940de4f9d1448a064874fd9d83479ae47c7a7
-  RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
   RNSoundPlayer: fc69a6fc5bab9ef1cca2321b5ce5179f37e0c072
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 7ab6e3ee4ce47d7b789d1cb520163833e515f452
