@@ -13,8 +13,8 @@
 6. Startup `fe_upload` server
    1. `cd frontend`
    2. `python3 fe_upload.py`
-7. In a separate terminal start Metro by running `npx react-native start`
-8. In a separate terminal run `npx react-native run-ios` to run the AnyTalk App
+7. In a separate terminal start Metro from the frontend folder by running `npx react-native start`
+8. In a separate terminal run `npx react-native run-ios` from the frontend folder to run the AnyTalk App
 
 ### Common Errors when trying `npx react-native run-ios`
 

@@ -1,5 +1,6 @@
 import * as functions from './src/utils/AudioUtils';
 import Button from './src/components/button';
+import MessageBox from './src/components/message';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import SoundPlayer from 'react-native-sound-player';
 import * as ApiHelperFunctions from './src/utils/ApiUtils';
@@ -27,6 +28,8 @@ const App = () => {
   const [textFromSpeech, setTextFromSpeech] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
   const [recordButtonText, setRecordButtonText] = useState('Record');
+  const [messages, setMessage] = useState([]);
+  let msg_id = 0;
 
   return (
     <SafeAreaView style={styles.safe_area}>
@@ -34,36 +37,34 @@ const App = () => {
       <View style={styles.body}>
 
         <View style={styles.title_view}>
-          <Image source={require('./fe-resources/AnyTalk-1.png')} />
+          <Image style={styles.logo} source={require('./fe-resources/AnyTalk-1.png')} />
         </View>
 
-        <View style={styles.chat_view}>
-          <Text style={styles.translated_text}>{textFromSpeech}</Text>
-        </View>
+        <ScrollView style={styles.chat_view}>
+          {messages.map(message => (
+            <MessageBox text={message.body} />
+          ))}
+        </ScrollView>
 
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
-          <KeyboardAvoidingView
-            style={styles.input_view}
-            behavior={(Platform.OS === 'ios') ? "padding" : "height"}
-          >
-            <ScrollView>
-              <View style={{ height: 220 }}>
-                <TextInput
-                  ref={input => {
-                    this.textInput = input;
-                  }}
-                  style={styles.input}
-                  multiline={true}
-                  placeholder="Type text to be read aloud..."
-                  onChangeText={newText => setText(newText)}
-                  returnKeyType='done'
-                  onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
-                />
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
+        <KeyboardAvoidingView
+          style={styles.input_view}
+          behavior={(Platform.OS === 'ios') ? "padding" : "height"}
+        >
 
-        </TouchableWithoutFeedback>
+          <View style={{ height: 220 }}>
+            <TextInput
+              ref={input => {
+                this.textInput = input;
+              }}
+              style={styles.input}
+              multiline={true}
+              placeholder="Type text to be read aloud..."
+              onChangeText={newText => setText(newText)}
+              returnKeyType='done'
+              onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
+            />
+          </View>
+        </KeyboardAvoidingView>
 
         <View style={styles.button_view}>
 
@@ -76,6 +77,10 @@ const App = () => {
                 var req_body = {
                   text: text,
                 };
+                setMessage([
+                  ...messages,
+                  { id: msg_id++, body: text }
+                ]);
                 { setTextFromSpeech(text) }
                 // 2. Make GET Request to TS API sending ('GET', req_body)
                 ApiHelperFunctions.getSpeechFromText(req_body).then(
@@ -109,6 +114,10 @@ const App = () => {
                       speech_path: result,
                     }).then(result2 => {
                       setTextFromSpeech(result2);
+                      setMessage([
+                        ...messages,
+                        { id: msg_id++, body: result2 }
+                      ]);
                     });
                   });
                 }
@@ -122,6 +131,18 @@ const App = () => {
               onPress={() => {
                 functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
                 console.log(recordingUrl);
+              }}
+            />
+          </View>
+
+          <View style={styles.button_row}>
+            <Button
+              text="test"
+              onPress={() => {
+                setMessage([
+                  ...messages,
+                  { id: msg_id++, body: "testtesttest" }
+                ]);
               }}
             />
           </View>
@@ -143,29 +164,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#003452',
     alignItems: 'center',
     padding: 10,
+    backgroundColor: 'orange'
   },
   title_view: {
     flex: 0.5,
+    padding: 0,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'yellow'
   },
   chat_view: {
-    width: 300,
+    width: 350,
     flex: 1,
     padding: 20,
-    borderRadius: 25,
+    borderWidth: 1,
+    borderRadius: 10,
     backgroundColor: 'white',
-    margin: 10,
-    textAlignVertical: 'top',
+    textAlignVertical: 'bottom',
   },
   translated_text: {
     fontSize: 20,
   },
   input_view: {
-    flex: 1,
+    flex: 0.5,
+    backgroundColor: 'green'
   },
   input: {
-    width: 300,
+    width: 350,
     flex: 1,
     borderWidth: 1,
     borderRadius: 10,
@@ -177,6 +202,7 @@ const styles = StyleSheet.create({
   button_view: {
     flex: 0.5,
     flexDirection: 'row',
+    backgroundColor: 'grey'
   },
   button_row: {
     flex: 0.5,
@@ -185,7 +211,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: '#38b6ff',
     fontSize: '10',
+    backgroundColor: 'grey'
   },
+  logo: {
+  }
+
 });
 
 export default App;
