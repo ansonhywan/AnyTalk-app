@@ -2,9 +2,9 @@
 
 1. Clone this repo
 2. Setup & install react native environment: https://reactnative.dev/docs/environment-setup
-3. Install backend dependancies:
-    1. `cd backend`
-    2. `pip3 install -r frontend/api/requirements.txt`
+3. Install dependancies:
+    1. `cd frontend/api`
+    2. `pip3 install -r requirements.txt`
 4. Install `ffmpeg` system library
     1. `brew install ffmpeg`
 5. Startup backend server
