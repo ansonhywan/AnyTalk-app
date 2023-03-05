@@ -5,7 +5,7 @@ import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import SoundPlayer from 'react-native-sound-player';
 import * as ApiHelperFunctions from './src/utils/ApiUtils';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import {
   Alert,
@@ -29,7 +29,7 @@ const App = () => {
   const [recordingUrl, setRecordingUrl] = useState('');
   const [recordButtonText, setRecordButtonText] = useState('Record');
   const [messages, setMessage] = useState([]);
-  let msg_id = 0;
+  const scrollViewRef = useRef();
 
   return (
     <SafeAreaView style={styles.safe_area}>
@@ -40,9 +40,9 @@ const App = () => {
           <Image style={styles.logo} source={require('./fe-resources/AnyTalk-1.png')} />
         </View>
 
-        <ScrollView style={styles.chat_view}>
+        <ScrollView style={styles.chat_view} ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
           {messages.map(message => (
-            <MessageBox text={message.body} />
+            <MessageBox text={message.body} type={message.type} />
           ))}
         </ScrollView>
 
@@ -51,7 +51,7 @@ const App = () => {
           behavior={(Platform.OS === 'ios') ? "padding" : "height"}
         >
 
-          <View style={{ height: 220 }}>
+          <View style={{ height: 120 }}>
             <TextInput
               ref={input => {
                 this.textInput = input;
@@ -79,7 +79,7 @@ const App = () => {
                 };
                 setMessage([
                   ...messages,
-                  { id: msg_id++, body: text }
+                  { body: text, type: 1 }
                 ]);
                 { setTextFromSpeech(text) }
                 // 2. Make GET Request to TS API sending ('GET', req_body)
@@ -116,8 +116,9 @@ const App = () => {
                       setTextFromSpeech(result2);
                       setMessage([
                         ...messages,
-                        { id: msg_id++, body: result2 }
+                        { body: result2, type: 2 }
                       ]);
+                      console.log(messages)
                     });
                   });
                 }
@@ -129,7 +130,8 @@ const App = () => {
             <Button
               text="Clear"
               onPress={() => {
-                functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
+                setMessage([]);
+                // functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
                 console.log(recordingUrl);
               }}
             />
@@ -141,8 +143,9 @@ const App = () => {
               onPress={() => {
                 setMessage([
                   ...messages,
-                  { id: msg_id++, body: "testtesttest" }
+                  { body: "Some very long text. Some very long text. Some very long text. Some very long text. Some very long text. Some very long text.", type: 2 }
                 ]);
+                console.log(messages)
               }}
             />
           </View>
@@ -164,30 +167,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#003452',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: 'orange'
+    //backgroundColor: 'orange'
   },
   title_view: {
-    flex: 0.5,
+    flex: 0.2,
     padding: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'yellow'
+    // backgroundColor: 'yellow'
   },
   chat_view: {
     width: 350,
     flex: 1,
-    padding: 20,
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    textAlignVertical: 'bottom',
+    padding: 0,
+    //borderWidth: 1,
+    //borderRadius: 10,
+    //backgroundColor: 'white',
+    textAlignVertical: 'top',
+    snapToAlignment: 'end',
+
   },
   translated_text: {
     fontSize: 20,
   },
   input_view: {
-    flex: 0.5,
-    backgroundColor: 'green'
+    flex: 0.4,
+    //backgroundColor: 'green'
   },
   input: {
     width: 350,
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   button_view: {
-    flex: 0.5,
+    flex: 0.3,
     flexDirection: 'row',
     backgroundColor: 'grey'
   },
@@ -211,7 +216,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: '#38b6ff',
     fontSize: '10',
-    backgroundColor: 'grey'
+    //backgroundColor: 'grey'
   },
   logo: {
   }
