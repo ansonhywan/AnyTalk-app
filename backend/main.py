@@ -88,6 +88,7 @@ def main():
 
 def save_message(text, type):
     print(f"saving message of type {type} in database: {text}")
+    if text == "" or None: return jsonify("", 400)
     new_message = Messages(text, type)
     db.session.add(new_message)
     db.session.commit()
