@@ -378,7 +378,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\npython3 /Users/tony/AnyTalk-app/frontend/fe_upload.py &\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/Users/tony/AnyTalk-app/frontend/run-fe.sh\n";
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

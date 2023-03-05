@@ -9,6 +9,9 @@ from datetime import datetime
 storage_client = storage.Client.from_service_account_json('/Users/tony/AnyTalk-app/frontend/gcp_creds.json')
 app = Flask(__name__)
 
+#for some reason need to manually specify path
+ffmpeg_path = '/opt/homebrew/bin/ffmpeg'
+
 def upload_file(bucket_name, path_to_file):
     bucket = storage_client.get_bucket(bucket_name)
     blob = bucket.blob(path_to_file)
@@ -18,7 +21,7 @@ def upload_file(bucket_name, path_to_file):
     return blob.public_url
 
 def convert_audio(speech_dir, target_dir):
-    subprocess.call(['ffmpeg', '-i', speech_dir, '-ar', '16000', '-ac', '1', target_dir])
+    subprocess.call([ffmpeg_path, '-i', speech_dir, '-ar', '16000', '-ac', '1', target_dir])
 
 def fe_upload(path_to_file):
     bucket_name = "anytalk-mp3s"
@@ -32,14 +35,12 @@ def upload_audio():
     path = request.json.get("local_path")
     if path == None: return json.dumps({"error": "must specify m4a path"})
     public_url = fe_upload(path)
+
+    print(" public URL: ", public_url)
+
     return json.dumps({
         "remote_path": public_url.split("/")[-1]
     })
 
 if __name__ == "__main__":
-    # Create a new process for the Flask server
-    server = Process(target=app.run, kwargs={"port": 7645, "debug": False})
-    server.start()
-
-    # Wait for the server to exit before exiting the script
-    server.join()
+    app.run(port=7645, debug=True)
