@@ -27,8 +27,9 @@ class Messages(db.Model):
         return {"id": self.id, "text": self.text, "type": self.type}
 
 
-db.create_all()
-
+# set up application context
+with app.app_context():
+    db.create_all()
 
 @app.route("/messages/", methods=["POST"])
 def create_message():
