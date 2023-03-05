@@ -1,10 +1,11 @@
 import * as functions from './src/utils/AudioUtils';
 import Button from './src/components/button';
+import MessageBox from './src/components/message';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import SoundPlayer from 'react-native-sound-player';
 import * as ApiHelperFunctions from './src/utils/ApiUtils';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import {
   Alert,
@@ -17,6 +18,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
@@ -26,6 +28,8 @@ const App = () => {
   const [textFromSpeech, setTextFromSpeech] = useState('');
   const [recordingUrl, setRecordingUrl] = useState('');
   const [recordButtonText, setRecordButtonText] = useState('Record');
+  const [messages, setMessage] = useState([]);
+  const scrollViewRef = useRef();
 
   return (
     <SafeAreaView style={styles.safe_area}>
@@ -33,15 +37,16 @@ const App = () => {
       <View style={styles.body}>
 
         <View style={styles.title_view}>
-          <Image source={require('./fe-resources/AnyTalk-1.png')} />
+          <Image style={styles.logo} source={require('./fe-resources/AnyTalk-1.png')} />
         </View>
 
-        <View style={styles.chat_view}>
-          <Text style={styles.translated_text}>{textFromSpeech}</Text>
-        </View>
+        <ScrollView style={styles.chat_view} ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
+          {messages.map(message => (
+            <MessageBox text={message.body} type={message.type} />
+          ))}
+        </ScrollView>
 
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={styles.input_view}>
+        <KeyboardAvoidingView  style={styles.input_view} behavior={(Platform.OS === 'ios') ? "padding" : "height"}>
             <TextInput
               ref={input => {
                 this.textInput = input;
@@ -53,10 +58,10 @@ const App = () => {
               returnKeyType='done'
               onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
             />
-          </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
 
         <View style={styles.button_view}>
+
           <View style={styles.button_row}>
             <Button // Convert T2S (entered text)
               text="Convert"
@@ -66,6 +71,11 @@ const App = () => {
                 var req_body = {
                   text: text,
                 };
+                setMessage([
+                  ...messages,
+                  { body: text, type: 1 }
+                ]);
+                { setTextFromSpeech(text) }
                 // 2. Make GET Request to TS API sending ('GET', req_body)
                 ApiHelperFunctions.getSpeechFromText(req_body).then(
                   result => {
@@ -98,6 +108,11 @@ const App = () => {
                       speech_path: result,
                     }).then(result2 => {
                       setTextFromSpeech(result2);
+                      setMessage([
+                        ...messages,
+                        { body: result2, type: 2 }
+                      ]);
+                      console.log(messages)
                     });
                   });
                 }
@@ -109,62 +124,78 @@ const App = () => {
             <Button
               text="Clear"
               onPress={() => {
-                functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
+                setMessage([]);
+                // functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
                 console.log(recordingUrl);
               }}
             />
           </View>
 
-        </View>
-      </View>
+          <View style={styles.button_row}>
+            <Button
+              text="test"
+              onPress={() => {
+                setMessage([
+                  ...messages,
+                  { body: "Some very long text. Some very long text. Some very long text. Some very long text. Some very long text. Some very long text.", type: 2 }
+                ]);
+                console.log(messages)
+              }}
+            />
+          </View>
 
-    </SafeAreaView>
+        </View>
+
+      </View >
+
+    </SafeAreaView >
   );
 };
 
 const styles = StyleSheet.create({
   safe_area: {
     flex: 1,
+    backgroundColor: '#003452',
   },
   body: {
     flex: 1,
     backgroundColor: '#003452',
     alignItems: 'center',
     padding: 10,
+    // backgroundColor: 'orange'
   },
   title_view: {
-    flex: 1,
+    flex: 0.1,
+    paddingBottom: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    // backgroundColor: 'yellow'
   },
   chat_view: {
-    width: 300,
-    height: 200,
-    padding: 75,
-    borderRadius: 25,
-    backgroundColor: 'white',
-    margin: 10,
-    textAlignVertical: 'top',
+    width: 370,
+    flex: 1,
   },
   translated_text: {
     fontSize: 20,
   },
   input_view: {
-    flex: 2,
+    flex: 0.2,
+    paddingTop: 10,
+    // backgroundColor: 'green'
   },
   input: {
-    width: 300,
-    height: 300,
+    width: 350,
+    flex: 1,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#7393B3',
     backgroundColor: 'white',
     padding: 10,
-    textAlignVertical: 'top',
   },
   button_view: {
-    flex: 0.5,
+    flex: 0.2,
     flexDirection: 'row',
+    backgroundColor: 'grey'
   },
   button_row: {
     flex: 0.5,
@@ -172,7 +203,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     color: '#38b6ff',
+    fontSize: '10',
+    // backgroundColor: 'grey'
   },
+  logo: {
+    resizeMode: 'contain',
+    height: 200,
+    width: 300,
+  }
 });
 
 export default App;
