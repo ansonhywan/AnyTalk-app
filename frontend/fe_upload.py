@@ -5,7 +5,7 @@ import subprocess
 from google.cloud import storage
 from datetime import datetime
 
-storage_client = storage.Client.from_service_account_json('gcp_creds.json')
+storage_client = storage.Client.from_service_account_json('/Users/tony/AnyTalk-app/frontend/gcp_creds.json')
 app = Flask(__name__)
 
 def upload_file(bucket_name, path_to_file):
@@ -36,4 +36,4 @@ def upload_audio():
     })
 
 if __name__ == "__main__":
-    app.run(port=7645, debug=True)
+    app.run(port=7645, debug=False)
