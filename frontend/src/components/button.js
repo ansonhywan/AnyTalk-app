@@ -14,7 +14,7 @@ export default function FlatButton({ text, onPress }) {
 const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
-    width: 100,
+    width: 90,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',

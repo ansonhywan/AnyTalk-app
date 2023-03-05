@@ -46,12 +46,7 @@ const App = () => {
           ))}
         </ScrollView>
 
-        <KeyboardAvoidingView
-          style={styles.input_view}
-          behavior={(Platform.OS === 'ios') ? "padding" : "height"}
-        >
-
-          <View style={{ height: 120 }}>
+        <KeyboardAvoidingView  style={styles.input_view} behavior={(Platform.OS === 'ios') ? "padding" : "height"}>
             <TextInput
               ref={input => {
                 this.textInput = input;
@@ -63,7 +58,6 @@ const App = () => {
               returnKeyType='done'
               onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
             />
-          </View>
         </KeyboardAvoidingView>
 
         <View style={styles.button_view}>
@@ -167,32 +161,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#003452',
     alignItems: 'center',
     padding: 10,
-    //backgroundColor: 'orange'
+    // backgroundColor: 'orange'
   },
   title_view: {
-    flex: 0.2,
-    padding: 0,
+    flex: 0.1,
+    paddingBottom: 5,
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: 'yellow'
   },
   chat_view: {
-    width: 350,
+    width: 370,
     flex: 1,
-    padding: 0,
-    //borderWidth: 1,
-    //borderRadius: 10,
-    //backgroundColor: 'white',
-    textAlignVertical: 'top',
-    snapToAlignment: 'end',
-
   },
   translated_text: {
     fontSize: 20,
   },
   input_view: {
-    flex: 0.4,
-    //backgroundColor: 'green'
+    flex: 0.2,
+    paddingTop: 10,
+    // backgroundColor: 'green'
   },
   input: {
     width: 350,
@@ -202,10 +190,9 @@ const styles = StyleSheet.create({
     borderColor: '#7393B3',
     backgroundColor: 'white',
     padding: 10,
-    textAlignVertical: 'top',
   },
   button_view: {
-    flex: 0.3,
+    flex: 0.2,
     flexDirection: 'row',
     backgroundColor: 'grey'
   },
@@ -216,11 +203,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: '#38b6ff',
     fontSize: '10',
-    //backgroundColor: 'grey'
+    // backgroundColor: 'grey'
   },
   logo: {
+    resizeMode: 'contain',
+    height: 200,
+    width: 300,
   }
-
 });
 
 export default App;
