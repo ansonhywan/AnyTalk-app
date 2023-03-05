@@ -1,5 +1,5 @@
 # ----------------- ADD MESSAGE -----------------
-curl -X POST -H "Content-Type: application/json" -d '{"text":"hello there"}' 127.0.0.1:5050/messages/
+curl -X POST -H "Content-Type: application/json" -d '{"text":"hello there", "type":"speech"}' 127.0.0.1:5050/messages/
 
 # ----------------- GET ALL MESSAGES -----------------
 curl -X GET http://127.0.0.1:5050/messages/
