@@ -1,0 +1,5 @@
+flask_sqlalchemy
+flask
+google-cloud-texttospeech
+google-cloud-speech
+google-cloud-storage
