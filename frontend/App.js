@@ -155,6 +155,7 @@ const App = () => {
 const styles = StyleSheet.create({
   safe_area: {
     flex: 1,
+    backgroundColor: '#003452',
   },
   body: {
     flex: 1,
