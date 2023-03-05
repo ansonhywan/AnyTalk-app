@@ -1,3 +1,4 @@
+from multiprocessing import Process
 from flask import Flask, request
 import os
 import json
@@ -36,4 +37,9 @@ def upload_audio():
     })
 
 if __name__ == "__main__":
-    app.run(port=7645, debug=False)
+    # Create a new process for the Flask server
+    server = Process(target=app.run, kwargs={"port": 7645, "debug": False})
+    server.start()
+
+    # Wait for the server to exit before exiting the script
+    server.join()
