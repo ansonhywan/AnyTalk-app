@@ -22,7 +22,9 @@ import {
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
-const error_audio_url = 'https://storage.googleapis.com/anytalk-bucket/error-audio-do-not-delete.mp3'
+const errorAudioUrl = 'https://storage.googleapis.com/anytalk-bucket/error-audio-do-not-delete.mp3'
+const recordAudioSoundUrl = 'https://storage.googleapis.com/anytalk-bucket/beep-record-sound.mp3'
+const endRecordAudioSoundUrl = 'https://storage.googleapis.com/anytalk-bucket/beep-end-record.mp3'
 
 const App = () => {
   const [text, setText] = useState('');
@@ -96,11 +98,13 @@ const App = () => {
               onPress={() => {
                 console.log(recordingUrl);
                 if (recordButtonText === 'Record') {
+                  SoundPlayer.playUrl(recordAudioSoundUrl);
                   functions
                     .onStartRecord(audioRecorderPlayer)
                     .then(result => setRecordingUrl(result));
                   setRecordButtonText('Stop');
                 } else {
+                  SoundPlayer.playUrl(endRecordAudioSoundUrl);
                   functions.onStopRecord(audioRecorderPlayer);
                   setRecordButtonText('Record');
                   console.log(recordingUrl);
@@ -123,7 +127,7 @@ const App = () => {
                         { body: result2, type: type }
                       ]);
                       if(empty_text){
-                        SoundPlayer.playUrl(error_audio_url);
+                        SoundPlayer.playUrl(errorAudioUrl);
                       }
                       console.log(messages)
                     });
