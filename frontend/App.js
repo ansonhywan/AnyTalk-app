@@ -115,20 +115,16 @@ const App = () => {
                       speech_path: result,
                     }).then(result2 => {
                       let type = 2;
-                      let empty_text = false;
                       if (typeof result2 === "undefined") {
-                        empty_text = true;
                         result2 = "Sorry, we did not get that. Could you repeat what you said?"
                         type = -1;
-                      } 
+                        SoundPlayer.playUrl(errorAudioUrl);
+                      }
                       setTextFromSpeech(result2);
                       setMessage([
                         ...messages,
                         { body: result2, type: type }
                       ]);
-                      if(empty_text){
-                        SoundPlayer.playUrl(errorAudioUrl);
-                      }
                       console.log(messages)
                     });
                   });
