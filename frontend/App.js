@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   home_padding: {
-    flex: 1.5,
+    flex: 1,
     backgroundColor: '#003452',
   },
 
