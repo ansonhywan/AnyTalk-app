@@ -104,7 +104,7 @@ const ChatScreen = () => {
                 var req_body = {
                   text: text,
                 };
-                if(text != ''){
+                if (text != '') {
                   setMessage([
                     ...messages,
                     { body: text, type: 1 }
@@ -174,7 +174,7 @@ const ChatScreen = () => {
             />
           </View>
 
-          {/* <View style={styles.button_row}>
+          <View style={styles.button_row}>
             <Button
               text="test"
               onPress={() => {
@@ -185,7 +185,7 @@ const ChatScreen = () => {
                 console.log(messages)
               }}
             />
-          </View> */}
+          </View>
 
         </View>
 
@@ -213,7 +213,7 @@ const HistoryScreen = () => {
       <View style={styles.hist_button_view}>
         <Button
           text="Delete Chat History"
-          onPress={() =>{
+          onPress={() => {
             ApiHelperFunctions.deleteMessages()
             setMessage([]);
           }}
@@ -234,7 +234,7 @@ const App = () => {
               style={{ width: 300, height: 30, }}
               source={require('./fe-resources/AnyTalk-1.png')}
               resizeMode='center'
-              
+
             />
           ),
           headerStyle: { backgroundColor: '#003452' }
