@@ -240,8 +240,17 @@ const App = () => {
           headerStyle: { backgroundColor: '#003452' }
         }}
         />
-        <Stack.Screen name="Chat" component={ChatScreen} options={{ headerStyle: { backgroundColor: '#38B6FF' } }} />
-        <Stack.Screen name="History" component={HistoryScreen} options={{ headerStyle: { backgroundColor: '#38B6FF' } }} />
+        <Stack.Screen name="Chat" component={ChatScreen} options={{
+          headerTitleStyle: {
+            color: 'white'
+          },
+          headerStyle: { backgroundColor: '#003452' }
+        }} />
+        <Stack.Screen name="History" component={HistoryScreen} options={{
+          headerTitleStyle: {
+            color: 'white'
+          },
+          headerStyle: { backgroundColor: '#003452' } }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
