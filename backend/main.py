@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import json
-
+import datetime
 from GCP_utils import GCP_utils
 
 app = Flask(__name__)
@@ -18,13 +18,15 @@ class Messages(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text)
     type = db.Column(db.Text)
+    time = db.Column(db.Text)
 
-    def __init__(self, text, type=None):
+    def __init__(self, text, type=None, time=None):
         self.text = text
         self.type = type
+        self.time = time
 
     def to_dict(self):
-        return {"id": self.id, "text": self.text, "type": self.type}
+        return {"id": self.id, "text": self.text, "type": self.type, "time": self.time}
 
 
 # set up application context
@@ -34,7 +36,7 @@ with app.app_context():
 @app.route("/messages/", methods=["POST"])
 def create_message():
     return save_message(
-        text=request.get_json().get("text"), type=request.get_json().get("type")
+        text=request.get_json().get("text"), type=request.get_json().get("type"), time=datetime.datetime.now().strftime("%H:%M:%S %p")
     )
 
 
@@ -58,11 +60,12 @@ def text_to_speech():
     text = request.json.get("text")
     if text == None:
         return json.dumps({"error": "must specify text in body"})
-    save_message(text, "text")
+    message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
+    save_message(text, "text", message_time)
 
     local_path = gcp_controller.convert_t2s(text)
     remote_path = gcp_controller.upload_file(local_path)
-    return json.dumps({"speech_path": remote_path, "error": None})
+    return json.dumps({"speech_path": remote_path, "error": None, "message_time": message_time})
 
 
 @app.route("/speech_to_text/", methods=["GET", "POST"])
@@ -74,8 +77,9 @@ def speech_to_text():
     if not speech_path.endswith(".flac"):
         return json.dumps({"error": "speech file must end with .flac"})
     text = gcp_controller.convert_s2t(speech_path)
-    save_message(text, "speech")
-    return json.dumps({"text": text, "error": None})
+    message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
+    save_message(text, "speech", message_time)
+    return json.dumps({"text": text, "error": None, "message_time": message_time})
 
 
 @app.route("/")
@@ -86,10 +90,10 @@ def main():
 # ----------------- Extras -----------------
 
 
-def save_message(text, type):
-    print(f"saving message of type {type} in database: {text}")
+def save_message(text, type, time):
     if text == "" or None: return jsonify("", 400)
-    new_message = Messages(text, type)
+    new_message = Messages(text, type, time)
     db.session.add(new_message)
+    print(f"saving message: {new_message.to_dict()}")
     db.session.commit()
     return jsonify(new_message.to_dict()), 201
