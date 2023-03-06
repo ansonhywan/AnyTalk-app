@@ -33,3 +33,9 @@
 - run `npm audit fix`
 - `cd ios`
 - run `pod install`
+
+5. Undefined symbols for architecture x86_64
+- `rm -rf ~/Library/Developer/Xcode/DerivedData/*`
+- `cd ios`
+- `pod install`
+- restart metro and rebuild app
