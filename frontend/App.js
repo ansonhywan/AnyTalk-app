@@ -22,6 +22,7 @@ import {
 } from 'react-native';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
+const error_audio_url = 'https://storage.googleapis.com/anytalk-bucket/error-audio-do-not-delete.mp3'
 
 const App = () => {
   const [text, setText] = useState('');
@@ -71,17 +72,19 @@ const App = () => {
                 var req_body = {
                   text: text,
                 };
-                setMessage([
-                  ...messages,
-                  { body: text, type: 1 }
-                ]);
-                { setTextFromSpeech(text) }
-                // 2. Make GET Request to TS API sending ('GET', req_body)
-                ApiHelperFunctions.getSpeechFromText(req_body).then(
-                  result => {
-                    SoundPlayer.playUrl(result);
-                  },
-                );
+                if(text != ''){
+                  setMessage([
+                    ...messages,
+                    { body: text, type: 1 }
+                  ]);
+                  // 2. Make GET Request to TS API sending ('GET', req_body)
+                  ApiHelperFunctions.getSpeechFromText(req_body).then(
+                    result => {
+                      SoundPlayer.playUrl(result);
+                    },
+                  );
+                  setText('');
+                }
                 this.textInput.clear();
               }}
             />
@@ -107,11 +110,21 @@ const App = () => {
                     ApiHelperFunctions.getTextFromSpeech({
                       speech_path: result,
                     }).then(result2 => {
+                      let type = 2;
+                      let empty_text = false;
+                      if (typeof result2 === "undefined") {
+                        empty_text = true;
+                        result2 = "Sorry, we did not get that. Could you repeat what you said?"
+                        type = -1;
+                      } 
                       setTextFromSpeech(result2);
                       setMessage([
                         ...messages,
-                        { body: result2, type: 2 }
+                        { body: result2, type: type }
                       ]);
+                      if(empty_text){
+                        SoundPlayer.playUrl(error_audio_url);
+                      }
                       console.log(messages)
                     });
                   });
