@@ -57,3 +57,45 @@ export async function getTextFromSpeech(req_body) {
     console.error(error);
   }
 }
+
+export async function getPrevMessages() {
+  try {
+    const response = await fetch(BACKEND_URL + '/messages/', {
+      method: 'GET',
+      header: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
+    const json = await response.json();
+    console.log('getPrevMessages');
+    console.log(json);
+
+    // Convert JSON to an array of messages
+    let messages = []
+    json.forEach(message => {
+      // console.log(message);
+      messages.push(message);
+    });
+
+
+    return messages;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function deleteMessages() {
+  try {
+    await fetch(BACKEND_URL + '/messages/', {
+      method: 'DELETE',
+      header: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
+    console.log('deleteMessages');
+  } catch (error) {
+    console.error(error);
+  }
+}
