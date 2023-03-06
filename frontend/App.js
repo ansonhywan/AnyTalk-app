@@ -124,7 +124,7 @@ const ChatScreen = () => {
 
           <View style={styles.button_row}>
             <Button // Convert S2T (recording)
-              text="Record"
+              text="  Record  "
               onPress={() => {
                 console.log(recordingUrl);
                 if (recordButtonText === 'Record') {
@@ -165,7 +165,7 @@ const ChatScreen = () => {
 
           <View style={styles.button_row}>
             <Button
-              text="Clear"
+              text="   Clear   "
               onPress={() => {
                 setMessage([]);
                 // functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
@@ -174,7 +174,7 @@ const ChatScreen = () => {
             />
           </View>
 
-          <View style={styles.button_row}>
+          {/* <View style={styles.button_row}>
             <Button
               text="test"
               onPress={() => {
@@ -185,7 +185,7 @@ const ChatScreen = () => {
                 console.log(messages)
               }}
             />
-          </View>
+          </View> */}
 
         </View>
 
