@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     timestamp: {
         textAlign: 'right',
         fontSize: 10,
+        paddingTop: 5
     }
 });
 
