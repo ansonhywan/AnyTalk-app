@@ -61,7 +61,7 @@ const ChatScreen = () => {
   const [recordingUrl, setRecordingUrl] = useState('');
   const [recordButtonText, setRecordButtonText] = useState('Record');
   const [messages, setMessage] = useState([]);
-  const [button3Label, setbutton3Label] = useState("  Prompt  ");
+  const [button3Label, setbutton3Label] = useState(" Prompt ");
   const scrollViewRef = useRef();
 
   return (
