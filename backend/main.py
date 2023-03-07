@@ -39,7 +39,7 @@ def create_message():
     return save_message(
         text=request.get_json().get("text"),
         type=request.get_json().get("type"),
-        time=datetime.datetime.now().strftime("%H:%M:%S %p"),
+        time=datetime.datetime.now().strftime("%I:%M %p, %B %d"),
     )
 
 
@@ -62,7 +62,7 @@ def clear_all_messages():
 def text_to_speech():
     text = request.json.get("text")
     is_prompt = request.json.get("is_prompt")
-    message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
+    message_time = datetime.datetime.now().strftime("%I:%M %p, %B %d")
     if text == None:
         return json.dumps(
             {"error": "must specify text in body", "message_time": message_time}
@@ -82,7 +82,7 @@ def text_to_speech():
 def speech_to_text():
     speech_path = request.json.get("speech_path")
     print("{}{}".format(50 * "=", speech_path))
-    message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
+    message_time = datetime.datetime.now().strftime("%I:%M %p, %B %d")
     if speech_path == None:
         return json.dumps(
             {"error": "must specify speech path in body", "message_time": message_time}
