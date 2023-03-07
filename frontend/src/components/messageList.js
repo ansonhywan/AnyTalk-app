@@ -8,7 +8,7 @@ const MessageList = ({ messages }) => {
             data={messages}
             inverted contentContainerStyle={{ flexDirection: 'column-reverse' }}
             renderItem={({ item }) => (
-                <MessageBox text={item.text} type={item.type == "text" ? 1 : 2} />
+                <MessageBox text={item.text} type={item.type} />
             )}
             keyExtractor={(item, index) => index.toString()}
         />
