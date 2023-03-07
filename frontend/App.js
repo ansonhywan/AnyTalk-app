@@ -26,6 +26,7 @@ const audioRecorderPlayer = new AudioRecorderPlayer();
 const errorAudioUrl = 'https://storage.googleapis.com/anytalk-bucket/error-audio-do-not-delete.mp3'
 const recordAudioSoundUrl = 'https://storage.googleapis.com/anytalk-bucket/beep-record-sound.mp3'
 const endRecordAudioSoundUrl = 'https://storage.googleapis.com/anytalk-bucket/beep-end-record.mp3'
+const prompt_text = "Hello, I am using AnyTalk due to my communication impairment. Please speak on the beep prompt."
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -62,6 +63,7 @@ const ChatScreen = () => {
   const [recordingUrl, setRecordingUrl] = useState('');
   const [recordButtonText, setRecordButtonText] = useState('Record');
   const [messages, setMessage] = useState([]);
+  const [button3Label, setbutton3Label] = useState("  Prompt  ");
   const scrollViewRef = useRef();
 
   return (
@@ -103,11 +105,12 @@ const ChatScreen = () => {
                 // 1. Construct JSON BODY
                 var req_body = {
                   text: text,
+                  is_prompt: false
                 };
                 if (text != '') {
                   setMessage([
                     ...messages,
-                    { body: text, type: 1 }
+                    { body: text, type: 'speech' }
                   ]);
                   // 2. Make GET Request to TS API sending ('GET', req_body)
                   ApiHelperFunctions.getSpeechFromText(req_body).then(
@@ -131,7 +134,7 @@ const ChatScreen = () => {
                   SoundPlayer.playUrl(recordAudioSoundUrl);
                   functions
                     .onStartRecord(audioRecorderPlayer)
-                    .then(result => setRecordingUrl(result));
+                    .then(result => setRecordingUrl(result));``
                   setRecordButtonText('Stop');
                 } else {
                   SoundPlayer.playUrl(endRecordAudioSoundUrl);
@@ -144,11 +147,11 @@ const ChatScreen = () => {
                     ApiHelperFunctions.getTextFromSpeech({
                       speech_path: result,
                     }).then(result2 => {
-                      let type = 2;
+                      let type = 'text';
                       if (typeof result2 === "undefined") {
                         result2 = "Sorry, we did not get that. Could you repeat what you said?"
-                        type = -1;
                         SoundPlayer.playUrl(errorAudioUrl);
+                        type = 'error';
                       }
                       setTextFromSpeech(result2);
                       setMessage([
@@ -165,9 +168,28 @@ const ChatScreen = () => {
 
           <View style={styles.button_row}>
             <Button
-              text="   Clear   "
+              text={button3Label}
               onPress={() => {
-                setMessage([]);
+                if (button3Label == "  Prompt  "){
+                  var req_body = {
+                    text: prompt_text,
+                    is_prompt: true
+                  };                  
+                  ApiHelperFunctions.getSpeechFromText(req_body).then(
+                    result => {
+                      SoundPlayer.playUrl(result);
+                    },
+                  );
+                  setMessage([
+                    ...messages,
+                    { body: prompt_text, type: 'prompt' }
+                  ]);
+                  setbutton3Label("  Clear  ");
+                }
+                else{
+                  setMessage([]);
+                  setbutton3Label("  Prompt  ");
+                }
                 // functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
                 console.log(recordingUrl);
               }}
