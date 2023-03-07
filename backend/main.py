@@ -81,7 +81,11 @@ def speech_to_text():
         return json.dumps({"error": "must specify speech path in body"})
     if not speech_path.endswith(".flac"):
         return json.dumps({"error": "speech file must end with .flac"})
-    text = gcp_controller.convert_s2t(speech_path)
+    try:
+        text = gcp_controller.convert_s2t(speech_path)
+    except Exception as e:
+        return json.dumps({"error": e})
+        
     message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
     save_message(
 		text=text,
