@@ -58,10 +58,15 @@ def clear_all_messages():
 @app.route("/text_to_speech/", methods=["GET", "POST"])
 def text_to_speech():
     text = request.json.get("text")
+    is_prompt = request.json.get("is_prompt")
     if text == None:
         return json.dumps({"error": "must specify text in body"})
     message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
-    save_message(text, "text", message_time)
+    save_message(
+		text=text,
+		type="text" if not is_prompt else "prompt",
+	 	time=message_time
+    )
 
     local_path = gcp_controller.convert_t2s(text)
     remote_path = gcp_controller.upload_file(local_path)
@@ -78,7 +83,11 @@ def speech_to_text():
         return json.dumps({"error": "speech file must end with .flac"})
     text = gcp_controller.convert_s2t(speech_path)
     message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
-    save_message(text, "speech", message_time)
+    save_message(
+		text=text,
+		type="speech",
+		time=message_time,
+		is_)
     return json.dumps({"text": text, "error": None, "message_time": message_time})
 
 
