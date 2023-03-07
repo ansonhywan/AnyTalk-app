@@ -26,7 +26,7 @@ class Messages(db.Model):
         self.time = time
 
     def to_dict(self):
-        return {"id": self.id, "text": self.text, "type": self.type, "time": self.time}
+        return {"id": self.id, "text": self.text, "type": self.type, "message_time": self.time}
 
 
 # set up application context
