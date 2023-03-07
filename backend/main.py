@@ -86,8 +86,8 @@ def speech_to_text():
     save_message(
 		text=text,
 		type="speech",
-		time=message_time,
-		is_)
+		time=message_time
+    )
     return json.dumps({"text": text, "error": None, "message_time": message_time})
 
 
@@ -99,7 +99,7 @@ def main():
 # ----------------- Extras -----------------
 
 
-def save_message(text, type, time):
+def save_message(text, type, time, ):
     if text == "" or None: return jsonify("", 400)
     new_message = Messages(text, type, time)
     db.session.add(new_message)
