@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://127.0.0.1:5050';
+const BACKEND_URL = 'https://8596-2620-101-f000-700-0-7f17-2a6a-7e4b.ngrok.io';
 const FE_UPLOAD_URL = 'http://127.0.0.1:7645/';
 
 export async function uploadAudioToBucket(req_body) {
@@ -33,7 +33,7 @@ export async function getSpeechFromText(req_body) {
     const json = await response.json();
     console.log('getSpeechFromText');
     console.log(json);
-    return json.speech_path;
+    return json;
   } catch (error) {
     console.error(error);
   }
@@ -52,7 +52,7 @@ export async function getTextFromSpeech(req_body) {
     const json = await response.json();
     console.log('getTextFromSpeech');
     console.log(json);
-    return json.text;
+    return json;
   } catch (error) {
     console.error(error);
   }

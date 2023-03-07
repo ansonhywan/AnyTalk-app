@@ -71,13 +71,9 @@ const ChatScreen = () => {
 
       <View style={styles.body}>
 
-        {/* <View style={styles.title_view}>
-          <Image style={styles.logo} source={require('./fe-resources/AnyTalk-1.png')} />
-        </View> */}
-
         <ScrollView style={styles.chat_view} ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
           {messages.map(message => (
-            <MessageBox text={message.body} type={message.type} />
+            <MessageBox text={message.body} type={message.type} timestamp={message.timestamp} />
           ))}
         </ScrollView>
 
@@ -115,8 +111,14 @@ const ChatScreen = () => {
                   // 2. Make GET Request to TS API sending ('GET', req_body)
                   ApiHelperFunctions.getSpeechFromText(req_body).then(
                     result => {
-                      SoundPlayer.playUrl(result);
+                      SoundPlayer.playUrl(result.speech_path);
+                      console.log(result);
+                      setMessage([
+                        ...messages,
+                        { body: text, type: "speech", timestamp: result.message_time }
+                      ])
                     },
+
                   );
                   setText('');
                 }
@@ -156,7 +158,7 @@ const ChatScreen = () => {
                       setTextFromSpeech(result2);
                       setMessage([
                         ...messages,
-                        { body: result2, type: type }
+                        { body: result2.text, type: "text", timestamp: result2.message_time }
                       ]);
                       console.log(messages)
                     });
@@ -196,7 +198,7 @@ const ChatScreen = () => {
             />
           </View>
 
-          {/* <View style={styles.button_row}>
+          <View style={styles.button_row}>
             <Button
               text="test"
               onPress={() => {
@@ -207,7 +209,7 @@ const ChatScreen = () => {
                 console.log(messages)
               }}
             />
-          </View> */}
+          </View>
 
         </View>
 
@@ -245,6 +247,10 @@ const HistoryScreen = () => {
   );
 };
 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
+
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
@@ -272,7 +278,8 @@ const App = () => {
           headerTitleStyle: {
             color: 'white'
           },
-          headerStyle: { backgroundColor: '#003452' } }} />
+          headerStyle: { backgroundColor: '#003452' }
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

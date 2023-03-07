@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 export default function MessageBox({text, type}) {
     console.log(type)
     return (
         <View style={type_to_color[type]}>
             <Text>{text}</Text>
+            <Text style={styles.timestamp}>{timestamp}</Text>
         </View>
     );
 }
