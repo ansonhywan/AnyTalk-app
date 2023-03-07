@@ -33,10 +33,13 @@ class Messages(db.Model):
 with app.app_context():
     db.create_all()
 
+
 @app.route("/messages/", methods=["POST"])
 def create_message():
     return save_message(
-        text=request.get_json().get("text"), type=request.get_json().get("type"), time=datetime.datetime.now().strftime("%H:%M:%S %p")
+        text=request.get_json().get("text"),
+        type=request.get_json().get("type"),
+        time=datetime.datetime.now().strftime("%H:%M:%S %p"),
     )
 
 
@@ -59,39 +62,42 @@ def clear_all_messages():
 def text_to_speech():
     text = request.json.get("text")
     is_prompt = request.json.get("is_prompt")
-    if text == None:
-        return json.dumps({"error": "must specify text in body"})
     message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
+    if text == None:
+        return json.dumps(
+            {"error": "must specify text in body", "message_time": message_time}
+        )
     save_message(
-		text=text,
-		type="text" if not is_prompt else "prompt",
-	 	time=message_time
+        text=text, type="text" if not is_prompt else "prompt", time=message_time
     )
 
     local_path = gcp_controller.convert_t2s(text)
     remote_path = gcp_controller.upload_file(local_path)
-    return json.dumps({"speech_path": remote_path, "error": None, "message_time": message_time})
+    return json.dumps(
+        {"speech_path": remote_path, "error": None, "message_time": message_time}
+    )
 
 
 @app.route("/speech_to_text/", methods=["GET", "POST"])
 def speech_to_text():
     speech_path = request.json.get("speech_path")
     print("{}{}".format(50 * "=", speech_path))
+    message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
     if speech_path == None:
-        return json.dumps({"error": "must specify speech path in body"})
+        return json.dumps(
+            {"error": "must specify speech path in body", "message_time": message_time}
+        )
     if not speech_path.endswith(".flac"):
-        return json.dumps({"error": "speech file must end with .flac"})
+        return json.dumps(
+            {"error": "speech file must end with .flac", "message_time": message_time}
+        )
     try:
         text = gcp_controller.convert_s2t(speech_path)
     except Exception as e:
-        return json.dumps({"error": e})
-        
-    message_time = datetime.datetime.now().strftime("%H:%M:%S %p")
-    save_message(
-		text=text,
-		type="speech",
-		time=message_time
-    )
+        print(f"ERROR {str(e)}")
+        return json.dumps({"error": str(e), "message_time": message_time})
+
+    save_message(text=text, type="speech", time=message_time)
     return json.dumps({"text": text, "error": None, "message_time": message_time})
 
 
@@ -103,8 +109,13 @@ def main():
 # ----------------- Extras -----------------
 
 
-def save_message(text, type, time, ):
-    if text == "" or None: return jsonify("", 400)
+def save_message(
+    text,
+    type,
+    time,
+):
+    if text == "" or None:
+        return jsonify("", 400)
     new_message = Messages(text, type, time)
     db.session.add(new_message)
     print(f"saving message: {new_message.to_dict()}")
