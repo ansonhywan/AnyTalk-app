@@ -49,9 +49,7 @@ const HomeScreen = ({ navigation }) => {
           }
         />
       </View>
-
       <View style={styles.home_padding}>
-
       </View>
     </View >
   );
@@ -63,7 +61,7 @@ const ChatScreen = () => {
   const [recordingUrl, setRecordingUrl] = useState('');
   const [recordButtonText, setRecordButtonText] = useState('Record');
   const [messages, setMessage] = useState([]);
-  const [button3Label, setbutton3Label] = useState("  Prompt  ");
+  const [button3Label, setbutton3Label] = useState(" Prompt ");
   const scrollViewRef = useRef();
 
   return (
@@ -71,13 +69,9 @@ const ChatScreen = () => {
 
       <View style={styles.body}>
 
-        {/* <View style={styles.title_view}>
-          <Image style={styles.logo} source={require('./fe-resources/AnyTalk-1.png')} />
-        </View> */}
-
         <ScrollView style={styles.chat_view} ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
           {messages.map(message => (
-            <MessageBox text={message.body} type={message.type} />
+            <MessageBox text={message.body} type={message.type} timestamp={message.timestamp} />
           ))}
         </ScrollView>
 
@@ -91,7 +85,7 @@ const ChatScreen = () => {
             placeholder="Type text to be read aloud..."
             onChangeText={newText => setText(newText)}
             returnKeyType='done'
-            onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
+            onSubmitEditing={Keyboard.dismiss}  // working, however pressing elsewhere does not stow
           />
         </KeyboardAvoidingView>
 
@@ -108,19 +102,20 @@ const ChatScreen = () => {
                   is_prompt: false
                 };
                 if (text != '') {
-                  setMessage([
-                    ...messages,
-                    { body: text, type: 'speech' }
-                  ]);
                   // 2. Make GET Request to TS API sending ('GET', req_body)
                   ApiHelperFunctions.getSpeechFromText(req_body).then(
                     result => {
-                      SoundPlayer.playUrl(result);
+                      SoundPlayer.playUrl(result.speech_path);
+                      setMessage([
+                        ...messages,
+                        { body: text, type: 'speech', timestamp: result.message_time }
+                      ])
                     },
                   );
                   setText('');
                 }
                 this.textInput.clear();
+                setbutton3Label("   Clear   ");
               }}
             />
           </View>
@@ -134,7 +129,7 @@ const ChatScreen = () => {
                   SoundPlayer.playUrl(recordAudioSoundUrl);
                   functions
                     .onStartRecord(audioRecorderPlayer)
-                    .then(result => setRecordingUrl(result));``
+                    .then(result => setRecordingUrl(result)); ``
                   setRecordButtonText('Stop');
                 } else {
                   SoundPlayer.playUrl(endRecordAudioSoundUrl);
@@ -147,17 +142,18 @@ const ChatScreen = () => {
                     ApiHelperFunctions.getTextFromSpeech({
                       speech_path: result,
                     }).then(result2 => {
-                      let type = 'text';
-                      if (typeof result2 === "undefined") {
-                        result2 = "Sorry, we did not get that. Could you repeat what you said?"
+                      let type = 'text'
+                      if (result2.error != undefined) {
+                        result2.text = "Sorry, we did not get that. Could you repeat what you said?"
                         SoundPlayer.playUrl(errorAudioUrl);
                         type = 'error';
                       }
                       setTextFromSpeech(result2);
                       setMessage([
                         ...messages,
-                        { body: result2, type: type }
+                        { body: result2.text, type: type, timestamp: result2.message_time }
                       ]);
+                      setbutton3Label("   Clear   ");
                       console.log(messages)
                     });
                   });
@@ -170,27 +166,26 @@ const ChatScreen = () => {
             <Button
               text={button3Label}
               onPress={() => {
-                if (button3Label == "  Prompt  "){
+                if (button3Label == " Prompt ") {
                   var req_body = {
                     text: prompt_text,
                     is_prompt: true
-                  };                  
+                  };
                   ApiHelperFunctions.getSpeechFromText(req_body).then(
                     result => {
-                      SoundPlayer.playUrl(result);
+                      SoundPlayer.playUrl(result.speech_path);
+                      setMessage([
+                        ...messages,
+                        { body: prompt_text, type: 'prompt', timestamp: result.message_time }
+                      ]);
                     },
                   );
-                  setMessage([
-                    ...messages,
-                    { body: prompt_text, type: 'prompt' }
-                  ]);
-                  setbutton3Label("  Clear  ");
+                  setbutton3Label("   Clear   ");
                 }
-                else{
+                else {
                   setMessage([]);
-                  setbutton3Label("  Prompt  ");
+                  setbutton3Label(" Prompt ");
                 }
-                // functions.onStartPlay(audioRecorderPlayer); // DEBUG, plays back recorded sample.
                 console.log(recordingUrl);
               }}
             />
@@ -198,11 +193,11 @@ const ChatScreen = () => {
 
           {/* <View style={styles.button_row}>
             <Button
-              text="test"
+              text='test'
               onPress={() => {
                 setMessage([
                   ...messages,
-                  { body: "Some very long text. Some very long text. Some very long text. Some very long text. Some very long text. Some very long text.", type: 2 }
+                  { body: "Some very long text. Some very long text. Some very long text. Some very long text. Some very long text. Some very long text.", type: 'text' }
                 ]);
                 console.log(messages)
               }}
@@ -219,11 +214,11 @@ const ChatScreen = () => {
 
 const HistoryScreen = () => {
   const scrollViewRef = useRef();
-  const [messages, setMessage] = useState([]);
+  const [messages, setMessages] = useState([]);
   useEffect(() => {
     ApiHelperFunctions.getPrevMessages().then(
       result => {
-        setMessage(result);
+        setMessages(result);
       }
     );
   }, []);
@@ -236,7 +231,7 @@ const HistoryScreen = () => {
         <Button
           text="Delete Chat History"
           onPress={() => {
-            ApiHelperFunctions.deleteMessages()
+            ApiHelperFunctions.deleteMessages();
             setMessage([]);
           }}
         />
@@ -244,6 +239,10 @@ const HistoryScreen = () => {
     </SafeAreaView>
   );
 };
+
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -272,7 +271,8 @@ const App = () => {
           headerTitleStyle: {
             color: 'white'
           },
-          headerStyle: { backgroundColor: '#003452' } }} />
+          headerStyle: { backgroundColor: '#003452' }
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
