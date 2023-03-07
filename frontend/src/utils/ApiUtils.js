@@ -74,10 +74,8 @@ export async function getPrevMessages() {
     // Convert JSON to an array of messages
     let messages = []
     json.forEach(message => {
-      // console.log(message);
       messages.push(message);
     });
-
 
     return messages;
   } catch (error) {

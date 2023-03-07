@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, Text, ScrollView } from 'react-native';
+import { FlatList } from 'react-native';
 import MessageBox from './message';
 
 const MessageList = ({ messages }) => {
@@ -8,7 +8,7 @@ const MessageList = ({ messages }) => {
             data={messages}
             inverted contentContainerStyle={{ flexDirection: 'column-reverse' }}
             renderItem={({ item }) => (
-                <MessageBox text={item.text} type={item.type} />
+                <MessageBox text={item.text} type={item.type} timestamp={item.message_time} />
             )}
             keyExtractor={(item, index) => index.toString()}
         />

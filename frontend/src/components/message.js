@@ -1,8 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-export default function MessageBox({text, type}) {
-    console.log(type)
+export default function MessageBox({ text, type, timestamp }) {
     return (
         <View style={type_to_color[type]}>
             <Text>{text}</Text>
@@ -46,6 +45,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fde26c',
         margin: 10,
         textAlignVertical: 'top',
+    },
+    timestamp: {
+        textAlign: 'right',
+        fontSize: 10,
     }
 });
 
@@ -53,6 +56,6 @@ const type_to_color = {
     'speech': styles.messageBoxGreen,
     'text': styles.messageBoxBlue,
     'prompt': styles.messageBoxPrompt,
-    'error': styles.messageBoxRed    
+    'error': styles.messageBoxRed
 };
 
