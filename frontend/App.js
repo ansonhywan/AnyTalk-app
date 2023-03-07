@@ -232,7 +232,7 @@ const HistoryScreen = () => {
           text="Delete Chat History"
           onPress={() => {
             ApiHelperFunctions.deleteMessages();
-            setMessage([]);
+            setMessages([]);
           }}
         />
       </View>
