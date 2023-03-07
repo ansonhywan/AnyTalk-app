@@ -85,7 +85,7 @@ const ChatScreen = () => {
             placeholder="Type text to be read aloud..."
             onChangeText={newText => setText(newText)}
             returnKeyType='done'
-            onSubmitEditing={Keyboard.dismiss}  //working, however pressing elsewhere does not stow
+            onSubmitEditing={Keyboard.dismiss}  // working, however pressing elsewhere does not stow
           />
         </KeyboardAvoidingView>
 
@@ -115,6 +115,7 @@ const ChatScreen = () => {
                   setText('');
                 }
                 this.textInput.clear();
+                setbutton3Label("   Clear   ");
               }}
             />
           </View>
@@ -152,6 +153,7 @@ const ChatScreen = () => {
                         ...messages,
                         { body: result2.text, type: type, timestamp: result2.message_time }
                       ]);
+                      setbutton3Label("   Clear   ");
                       console.log(messages)
                     });
                   });
