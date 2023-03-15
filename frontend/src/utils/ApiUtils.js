@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://8596-2620-101-f000-700-0-7f17-2a6a-7e4b.ngrok.io';
+const BACKEND_URL = 'http://127.0.0.1:/5050';
 const FE_UPLOAD_URL = 'http://127.0.0.1:7645/';
 
 export async function uploadAudioToBucket(req_body) {
