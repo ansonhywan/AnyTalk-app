@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://127.0.0.1:/5050';
+const BACKEND_URL = 'http://127.0.0.1:5050/';
 const FE_UPLOAD_URL = 'http://127.0.0.1:7645/';
 
 export async function uploadAudioToBucket(req_body) {
